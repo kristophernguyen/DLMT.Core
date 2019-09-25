@@ -1,0 +1,23 @@
+<app-dlmt-header #appdlmtheader (toggleMenu)="toggleMenu($event)"></app-dlmt-header>
+<div class="slim-body">
+  <app-left-side-menu class="slim-sidebar" #leftsidemenu></app-left-side-menu>
+  <div class="slim-mainpanel">
+    <div class="container">
+      <div class="slim-pageheader">
+        <ol class="breadcrumb slim-breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Blank Page</li>
+        </ol>
+        <h6 class="slim-pagetitle">Blank Page</h6>
+      </div><!-- slim-pageheader -->
+      <router-outlet></router-outlet>
+    </div><!-- container -->
+
+    <div class="slim-footer mg-t-0">
+      <div class="container-fluid">
+        <p>Riverside County</p>
+      </div><!-- container-fluid -->
+    </div><!-- slim-footer -->
+  </div><!-- slim-mainpanel -->
+</div><!-- slim-body -->
+

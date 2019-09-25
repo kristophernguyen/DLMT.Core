@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DLMT.Common\DLMT.Common.csproj" />
+    <ProjectReference Include="..\DLMT.Dac\DLMT.Dac.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,12 +1,13 @@
-import { Component, Renderer2, OnInit, OnDestroy } from '@angular/core';
-import { AppSettingService } from './services/common/app-setting-service';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { AppSettingService } from 'src/app/services/common/app-setting-service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-site-layout',
+  templateUrl: './site-layout.component.html',
+  styleUrls: ['./site-layout.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+
+export class SiteLayoutComponent implements OnInit, OnDestroy {
   title = 'DLMT';
   isMenuOpen = true;
   constructor(

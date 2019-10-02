@@ -1,15 +1,32 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SigninComponent } from './authentication/signin/signin.component';
-import { NotFoundComponent } from './common/not-found/not-found.component';
-import { SecurepageComponent } from './securepage/securepage.component';
-import { AuthorizationGuard } from './authentication/AuthorizationGuard';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthGuardService } from './services/authentication/auth-guard.service';
+import { DlmtSearchComponent } from './dlmt-search/dlmt-search.component';
+import { AuthCallbackComponent } from './authentication/auth-callback/auth-callback.component';
+import { SiteLayoutComponent } from './_layout/site-layout/site-layout.component';
+import { SiteNolayoutComponent } from './_layout/site-nolayout/site-nolayout.component';
+import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.component';
 
 
 const routes: Routes = [
-  {path: 'authentication/signin', component: SigninComponent},
-  {path: 'securepage', component:SecurepageComponent,   canActivate: [AuthorizationGuard]},
-  {path: '**', component: NotFoundComponent}
+  {
+    path: '', component: SiteLayoutComponent, 
+    children:[
+      { path: '', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuardService]},
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
+      { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] }
+    ]
+  },
+  {
+    path: '', component: SiteNolayoutComponent, 
+    children:[
+      { path: 'auth-callback', component: AuthCallbackComponent },
+      { path: 'unauthorize', component: UnauthorizeComponent },
+      { path: 'error', component: UnauthorizeComponent },
+    ]
+  },
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 @NgModule({

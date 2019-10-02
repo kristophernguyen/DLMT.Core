@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from 'src/app/services/authentication/auth.service';
 
 @Component({
   selector: 'app-dlmt-header',
@@ -8,18 +8,16 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 })
 export class DlmtHeaderComponent implements OnInit {
   @Output() toggleMenu = new EventEmitter();
-  constructor(public oidcSecurityService: OidcSecurityService) { }
-
+  fullName:string;
+  constructor(private authService: AuthService) { }
+  
   ngOnInit() {
+    let tempClaims = this.authService.getClaims();
+    if (tempClaims && tempClaims.family_name && tempClaims.given_name){
+      this.fullName = tempClaims.given_name + " " + tempClaims.family_name;
+    }
   }
-  login($event) {
-    $event.preventDefault();
-    this.oidcSecurityService.authorize();
-  }
-
-  logout() {
-    this.oidcSecurityService.logoff();
-  }
+  
   toggleSideMenu($event){
     $event.preventDefault();
     this.toggleMenu.emit({});

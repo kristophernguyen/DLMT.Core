@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,22 +10,20 @@ import { DlmtSearchDetailsComponent } from './dlmt-search/dlmt-search-details/dl
 import { DlmtHeaderComponent } from './common/dlmt-header/dlmt-header.component';
 import { AppSettingService } from './services/common/app-setting-service';
 import { LeftSideMenuComponent } from './common/left-side-menu/left-side-menu.component';
-import { AuthModule, ConfigResult, OidcConfigService, OidcSecurityService, OpenIdConfiguration, LoggerService, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
-import { HttpClientModule } from '@angular/common/http';
-import { SigninComponent } from './authentication/signin/signin.component';
-import { SignoutComponent } from './authentication/signout/signout.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NotFoundComponent } from './common/not-found/not-found.component';
-import { SecurepageComponent } from './securepage/securepage.component';
-import { AuthService } from './authentication/AuthService';
-import { AuthorizationGuard } from './authentication/AuthorizationGuard';
-
-const oidc_configuration = 'assets/auth.clientConfiguration.json';
-// if your config is on server side
-// const oidc_configuration = ${window.location.origin}/api/ClientAppSettings
-
-export function loadConfig(oidcConfigService: OidcConfigService) {
-    return () => oidcConfigService.load(oidc_configuration);
-}
+import { AuthCallbackComponent } from './authentication/auth-callback/auth-callback.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SiteLayoutComponent } from './_layout/site-layout/site-layout.component';
+import { SiteNolayoutComponent } from './_layout/site-nolayout/site-nolayout.component';
+import { AuthGuardService } from './services/authentication/auth-guard.service';
+import { MessageService } from './services/common/message-service';
+import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.component';
+import { ErrorComponent } from './common/error/error.component';
+import { TokenInterceptor } from './services/common/token-interceptor';
+import { AppSettingApiUrl } from './common/config/app-config';
+import { environment } from 'src/environments/environment';
+import { AppSettingApi } from './services/apis/app-setting-api';
 
 @NgModule({
   declarations: [
@@ -34,69 +33,34 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     DlmtSearchDetailsComponent,
     DlmtHeaderComponent,
     LeftSideMenuComponent,
-    SigninComponent,
-    SignoutComponent,
     NotFoundComponent,
-    SecurepageComponent
+    AuthCallbackComponent,
+    DashboardComponent,
+    SiteLayoutComponent,
+    SiteNolayoutComponent,
+    UnauthorizeComponent,
+    ErrorComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    AuthModule.forRoot(),
     AppRoutingModule
   ],
   providers: [
-    AuthorizationGuard,
-    AuthService,
-    OidcSecurityService,
-    OidcConfigService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: loadConfig,
-            deps: [OidcConfigService],
-            multi: true,
-        },
-    LoggerService,
-    AppSettingService
+    AppSettingService,
+    AuthGuardService,
+    MessageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    AppSettingApi,
+    {provide: AppSettingApiUrl, useValue:environment.api_url.appsetting}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
-  constructor(private oidcSecurityService: OidcSecurityService, private oidcConfigService: OidcConfigService) {
-    this.oidcConfigService.onConfigurationLoaded.subscribe((configResult: ConfigResult) => {
-
-        // Use the configResult to set the configurations
-  
-        // const config: OpenIdConfiguration = {
-        //     stsServer: configResult.customConfig.stsServer,
-        //     redirect_url: configResult.customConfig.redirect_url,
-        //     client_id: configResult.customConfig.client_id,
-        //     scope: configResult.customConfig.scope,
-        //     response_type: configResult.customConfig.response_type,
-        //     silent_renew: configResult.customConfig.silent_renew,
-        //     silent_renew_url: 'http://localhost:4200/silent-renew.html',
-        //     log_console_debug_active: configResult.customConfig.log_console_debug_active
-        // };
-        const config: OpenIdConfiguration = {
-          stsServer: "https://localhost:44306",
-          redirect_url: "http://localhost:4200/authentication/signin",
-          client_id: "spa.pkce.client",
-          scope: "openid profile pkce_client",
-          response_type: "code",
-          silent_renew: false,
-          silent_renew_url: 'http://localhost:4200/silent-renew.html'
-      };
-    //   const authWellKnownEndpoints: AuthWellKnownEndpoints = {
-    //     issuer: 'https://localhost:44306/.well-known/openid-configuration/jwks',
-    //     authorization_endpoint: 'https://localhost:44306/connect/authorize',
-    //     token_endpoint: 'https://localhost:44306/connect/token',
-    //     userinfo_endpoint: 'https://localhost:44306/connect/userinfo',
-    //     end_session_endpoint: 'https://localhost:44306/connect/endsession',
-    //     check_session_iframe: 'https://localhost:44306/connect/checksession',
-    //     revocation_endpoint: 'https://localhost:44306/connect/revocation',
-    //     introspection_endpoint: 'https://localhost:44306/connect/introspect',
-    // };
-        this.oidcSecurityService.setupModule(config, configResult.authWellknownEndpoints);
-    });
-}
+export class AppModule {
+  constructor() { }
 }

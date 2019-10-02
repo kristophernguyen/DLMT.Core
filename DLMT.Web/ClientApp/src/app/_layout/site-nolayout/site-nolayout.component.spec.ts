@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SignoutComponent } from './signout.component';
+import { SiteNolayoutComponent } from './site-nolayout.component';
 
-describe('SignoutComponent', () => {
-  let component: SignoutComponent;
-  let fixture: ComponentFixture<SignoutComponent>;
+describe('SiteNolayoutComponent', () => {
+  let component: SiteNolayoutComponent;
+  let fixture: ComponentFixture<SiteNolayoutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignoutComponent ]
+      declarations: [ SiteNolayoutComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignoutComponent);
+    fixture = TestBed.createComponent(SiteNolayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

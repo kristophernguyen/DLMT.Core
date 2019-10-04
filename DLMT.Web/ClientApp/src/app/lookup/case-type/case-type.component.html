@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="slim-pageheader">
+        <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Case Type</li>
+        </ol>
+        <h6 class="slim-pagetitle">Case Type</h6>
+    </div><!-- slim-pageheader -->
+    <div class="main-component-container">
+        <div class="box box-search">
+            <div class="row">
+                <div class="col-10">
+                    <kendo-textbox-container floatingLabel="Search" class="full-width">
+                        <input kendoTextBox />
+                    </kendo-textbox-container>
+                </div>
+                <div class="col-2">
+                    <div>
+                                <button type="button" class="btn btn-primary btn-sm bottomdiv">New Case Type</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-grid">
+            <app-case-type-view class="grid-full-height"></app-case-type-view>
+        </div>
+    </div>
+</div><!-- container -->

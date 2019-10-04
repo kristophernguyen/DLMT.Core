@@ -1,0 +1,49 @@
+.container{
+    height: 100%;
+    min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+app-root {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  app-dashboard{
+    height:100%;
+  }
+  app-case-type{
+      height:100%;
+  }
+
+
+.main-component-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+} 
+.box {
+    display: flex;
+    flex-direction: column;
+}
+.box-search {
+    height: 60px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.box-grid {
+    flex: 1;
+}
+.full-width {
+    width: 100%;
+}
+.grid-full-height{
+    height:100%;
+}

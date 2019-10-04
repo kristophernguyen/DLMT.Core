@@ -13,7 +13,7 @@ import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { AppSettingApiUrl } from 'src/app/common/config/app-config';
 
-//export const AppSettingApiUrl = new InjectionToken<string>('AppSettingApiUrl');
+//export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
 export class AppSettingApi {
@@ -158,6 +158,73 @@ export class AppSettingApi {
             }));
         }
         return _observableOf<GetApplicationSettingsResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    viewSetting(id: number): Observable<GetViewSettingResponse> {
+        let url_ = this.baseUrl + "/api/ViewSetting/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processViewSetting(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processViewSetting(<any>response_);
+                } catch (e) {
+                    return <Observable<GetViewSettingResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetViewSettingResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processViewSetting(response: HttpResponseBase): Observable<GetViewSettingResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetViewSettingResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetViewSettingResponse>(<any>null);
     }
 }
 
@@ -671,6 +738,286 @@ export interface IGetApplicationSettingsResponse {
     settings?: AppSettingDTO[];
     errorMsg?: string;
     hasError?: boolean;
+}
+
+export class ViewAttributeDTO implements IViewAttributeDTO {
+    viewSchemaAttributeId?: number;
+    attributeKey?: string;
+    attributeValue?: string;
+
+    constructor(data?: IViewAttributeDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.viewSchemaAttributeId = data["viewSchemaAttributeId"];
+            this.attributeKey = data["attributeKey"];
+            this.attributeValue = data["attributeValue"];
+        }
+    }
+
+    static fromJS(data: any): ViewAttributeDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ViewAttributeDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["viewSchemaAttributeId"] = this.viewSchemaAttributeId;
+        data["attributeKey"] = this.attributeKey;
+        data["attributeValue"] = this.attributeValue;
+        return data; 
+    }
+}
+
+export interface IViewAttributeDTO {
+    viewSchemaAttributeId?: number;
+    attributeKey?: string;
+    attributeValue?: string;
+}
+
+export class ColumnDTO implements IColumnDTO {
+    columnSchemaId?: number;
+    columnName?: string;
+    propertyValueName?: string;
+    columnType?: string;
+    columnEditableType?: string;
+    isPrimary?: boolean;
+    columnFormat?: string;
+    columnWidth?: number;
+    isFilterable?: boolean;
+    filterType?: string;
+    isSortable?: boolean;
+    isHidden?: boolean;
+    columnOrder?: number;
+    isImage?: boolean;
+    createdBy?: number;
+    createdByPersonName?: string;
+    updatedBy?: number;
+    updatedByPersonName?: string;
+    statusId?: number;
+
+    constructor(data?: IColumnDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.columnSchemaId = data["columnSchemaId"];
+            this.columnName = data["columnName"];
+            this.propertyValueName = data["propertyValueName"];
+            this.columnType = data["columnType"];
+            this.columnEditableType = data["columnEditableType"];
+            this.isPrimary = data["isPrimary"];
+            this.columnFormat = data["columnFormat"];
+            this.columnWidth = data["columnWidth"];
+            this.isFilterable = data["isFilterable"];
+            this.filterType = data["filterType"];
+            this.isSortable = data["isSortable"];
+            this.isHidden = data["isHidden"];
+            this.columnOrder = data["columnOrder"];
+            this.isImage = data["isImage"];
+            this.createdBy = data["createdBy"];
+            this.createdByPersonName = data["createdByPersonName"];
+            this.updatedBy = data["updatedBy"];
+            this.updatedByPersonName = data["updatedByPersonName"];
+            this.statusId = data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): ColumnDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["columnSchemaId"] = this.columnSchemaId;
+        data["columnName"] = this.columnName;
+        data["propertyValueName"] = this.propertyValueName;
+        data["columnType"] = this.columnType;
+        data["columnEditableType"] = this.columnEditableType;
+        data["isPrimary"] = this.isPrimary;
+        data["columnFormat"] = this.columnFormat;
+        data["columnWidth"] = this.columnWidth;
+        data["isFilterable"] = this.isFilterable;
+        data["filterType"] = this.filterType;
+        data["isSortable"] = this.isSortable;
+        data["isHidden"] = this.isHidden;
+        data["columnOrder"] = this.columnOrder;
+        data["isImage"] = this.isImage;
+        data["createdBy"] = this.createdBy;
+        data["createdByPersonName"] = this.createdByPersonName;
+        data["updatedBy"] = this.updatedBy;
+        data["updatedByPersonName"] = this.updatedByPersonName;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IColumnDTO {
+    columnSchemaId?: number;
+    columnName?: string;
+    propertyValueName?: string;
+    columnType?: string;
+    columnEditableType?: string;
+    isPrimary?: boolean;
+    columnFormat?: string;
+    columnWidth?: number;
+    isFilterable?: boolean;
+    filterType?: string;
+    isSortable?: boolean;
+    isHidden?: boolean;
+    columnOrder?: number;
+    isImage?: boolean;
+    createdBy?: number;
+    createdByPersonName?: string;
+    updatedBy?: number;
+    updatedByPersonName?: string;
+    statusId?: number;
+}
+
+export class ViewDTO implements IViewDTO {
+    viewSchemaId?: number;
+    viewName?: string;
+    serverSorting?: boolean;
+    serverFiltering?: boolean;
+    viewAttributes?: ViewAttributeDTO[];
+    columns?: ColumnDTO[];
+    createdBy?: number;
+    createdByPersonName?: string;
+    updatedBy?: number;
+    updatedByPersonName?: string;
+    statusId?: number;
+
+    constructor(data?: IViewDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.viewSchemaId = data["viewSchemaId"];
+            this.viewName = data["viewName"];
+            this.serverSorting = data["serverSorting"];
+            this.serverFiltering = data["serverFiltering"];
+            if (Array.isArray(data["viewAttributes"])) {
+                this.viewAttributes = [] as any;
+                for (let item of data["viewAttributes"])
+                    this.viewAttributes!.push(ViewAttributeDTO.fromJS(item));
+            }
+            if (Array.isArray(data["columns"])) {
+                this.columns = [] as any;
+                for (let item of data["columns"])
+                    this.columns!.push(ColumnDTO.fromJS(item));
+            }
+            this.createdBy = data["createdBy"];
+            this.createdByPersonName = data["createdByPersonName"];
+            this.updatedBy = data["updatedBy"];
+            this.updatedByPersonName = data["updatedByPersonName"];
+            this.statusId = data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): ViewDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ViewDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["viewSchemaId"] = this.viewSchemaId;
+        data["viewName"] = this.viewName;
+        data["serverSorting"] = this.serverSorting;
+        data["serverFiltering"] = this.serverFiltering;
+        if (Array.isArray(this.viewAttributes)) {
+            data["viewAttributes"] = [];
+            for (let item of this.viewAttributes)
+                data["viewAttributes"].push(item.toJSON());
+        }
+        if (Array.isArray(this.columns)) {
+            data["columns"] = [];
+            for (let item of this.columns)
+                data["columns"].push(item.toJSON());
+        }
+        data["createdBy"] = this.createdBy;
+        data["createdByPersonName"] = this.createdByPersonName;
+        data["updatedBy"] = this.updatedBy;
+        data["updatedByPersonName"] = this.updatedByPersonName;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IViewDTO {
+    viewSchemaId?: number;
+    viewName?: string;
+    serverSorting?: boolean;
+    serverFiltering?: boolean;
+    viewAttributes?: ViewAttributeDTO[];
+    columns?: ColumnDTO[];
+    createdBy?: number;
+    createdByPersonName?: string;
+    updatedBy?: number;
+    updatedByPersonName?: string;
+    statusId?: number;
+}
+
+export class GetViewSettingResponse implements IGetViewSettingResponse {
+    result?: ViewDTO;
+
+    constructor(data?: IGetViewSettingResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.result = data["result"] ? ViewDTO.fromJS(data["result"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetViewSettingResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetViewSettingResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["result"] = this.result ? this.result.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IGetViewSettingResponse {
+    result?: ViewDTO;
 }
 
 export class ApiException extends Error {

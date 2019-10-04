@@ -23,9 +23,13 @@ namespace DLMT.Dac.Implementation
         {
             var resp = new CaseTypeGetAllResponse();
             var tempQuery = string.Empty;
+            var startRow = 0;
+            var endRow = 0;
             if (req.Predicate != null)
             {
                 tempQuery = req.Predicate.ConvertToString();
+                startRow = req.Predicate.StartRow;
+                endRow = req.Predicate.EndRow;
             }
             using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
             {
@@ -36,7 +40,15 @@ namespace DLMT.Dac.Implementation
                     Query = tempQuery
                 };
                 var rawResult = await conn.QueryAsync<CaseTypeDTO>(storeproc, dynparam, null, null, CommandType.StoredProcedure);
-                resp.Result = rawResult.ToList();
+                resp.Total = rawResult != null && rawResult.Any() ? rawResult.Count() : 0;
+                if (startRow >= 0 && endRow >= 0)
+                {
+                    resp.Result = rawResult.ToList().Skip(startRow).Take(endRow - startRow).ToList();
+                }
+                else
+                {
+                    resp.Result = rawResult.ToList();
+                }
             }
             return resp;
         }

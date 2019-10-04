@@ -7,6 +7,7 @@ import { AuthCallbackComponent } from './authentication/auth-callback/auth-callb
 import { SiteLayoutComponent } from './_layout/site-layout/site-layout.component';
 import { SiteNolayoutComponent } from './_layout/site-nolayout/site-nolayout.component';
 import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.component';
+import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,8 @@ const routes: Routes = [
     children:[
       { path: '', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuardService]},
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
-      { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] }
+      { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] },
+      { path: 'lookup/casetype', component: CaseTypeComponent, canActivate: [AuthGuardService] }
     ]
   },
   {

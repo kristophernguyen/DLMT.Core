@@ -10,7 +10,7 @@
     </a>
     <ul class="nav sidebar-nav-sub show_nav" *ngIf="m.showChildDsp" [@slideInOut] >
         <li *ngFor="let c of m.childMenuItems; let j = index;" class="nav-sub-item">
-          <a [routerLink]='[c.routeName]' class="nav-sub-link" (click)="childMenuClick(c)" [class.active]="c.isActiveDsp">{{c.name}}</a></li>
+          <a [routerLink]='[c.routeName]' class="nav-sub-link" (click)="childMenuClick($event, c)" [class.active]="c.isActiveDsp">{{c.name}}</a></li>
       </ul>
   </li>
 </ul> 

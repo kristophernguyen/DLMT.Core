@@ -25,9 +25,13 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
               "src/assets/fonts/font-awesome/css/font-awesome.css",
               "src/assets/fonts/Ionicons/css/ionicons.css",
-              "src/assets/styles/site.css"
+              "src/assets/styles/site.css",
+              "src/assets/styles/dlmt-site.css"
             ],
             "scripts": []
           },
@@ -92,6 +96,9 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
               "src/styles.css"
             ],
             "scripts": []
@@ -123,6 +130,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ClientApp"
 }

@@ -12271,15 +12271,15 @@ textarea.parsley-success:focus {
       padding: 15px; }
       @media (min-width: 576px) {
         .slim-body .slim-mainpanel .container {
-          padding: 20px; } }
+          padding: 15px; } }
       @media (min-width: 768px) {
         .slim-body .slim-mainpanel .container {
-          padding: 25px; } }
+          padding: 15px; } }
       .slim-body .slim-mainpanel .container.container-messages {
         padding: 0; }
         @media (min-width: 992px) {
           .slim-body .slim-mainpanel .container.container-messages {
-            padding: 20px; } }
+            padding: 15px; } }
   .slim-body .slim-pageheader {
     padding-top: 0; }
   .slim-body .slim-footer {

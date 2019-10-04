@@ -24,6 +24,13 @@ import { TokenInterceptor } from './services/common/token-interceptor';
 import { AppSettingApiUrl } from './common/config/app-config';
 import { environment } from 'src/environments/environment';
 import { AppSettingApi } from './services/apis/app-setting-api';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { CaseTypeComponent } from './lookup/case-type/case-type.component';
+import { CaseTypeViewComponent } from './lookup/case-type/case-type-view/case-type-view.component';
+import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/case-type-details.component';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+
+
 
 @NgModule({
   declarations: [
@@ -39,13 +46,18 @@ import { AppSettingApi } from './services/apis/app-setting-api';
     SiteLayoutComponent,
     SiteNolayoutComponent,
     UnauthorizeComponent,
-    ErrorComponent
+    ErrorComponent,
+    CaseTypeComponent,
+    CaseTypeViewComponent,
+    CaseTypeDetailsComponent,
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    GridModule,
+    InputsModule
   ],
   providers: [
     AppSettingService,

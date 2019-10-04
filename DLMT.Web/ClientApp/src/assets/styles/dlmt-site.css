@@ -47,3 +47,157 @@ app-root {
 .grid-full-height{
     height:100%;
 }
+/* Search Input */
+
+.search-all.search-all-new-nav {
+    display: block;
+    overflow: hidden;
+    transition: left 0.2s;
+    padding: 0
+}
+
+.search-all.search-all-new-nav input {
+    width: 100%;
+    height: 34px;
+    padding-left: 40px;
+    border: 0;
+    font-size: 14px;
+    outline: none;
+    background-image: url("/assets/img/search-input-icon.svg");
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+    background-size: 16px;
+    background-color: transparent
+}
+
+.search-all.search-all-new-nav .search-input-container {
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 8px 0 0 0;
+    transition: border-color 0.3s ease-in-out
+}
+
+.search-all.search-all-new-nav .search-input-container:focus-within {
+    border-bottom-color: #1b84e7
+}
+.local-search input {
+    width: 100%;
+    height: 50px;
+    padding-left: 45px;
+    padding-right: 15px;
+    border: 1px solid #fff;
+    font-size: 19px;
+    font-family: "Roboto Regular", Helvetica, Arial, sans-serif;
+    outline: none;
+    color: #36393f;
+    background: url("/assets/img/search-input-icon.svg") #fff no-repeat 10px 50%;
+    transition: border-color .2s, box-shadow .2s;
+    box-shadow: 0 0 18px 0 rgba(0,0,0,0.05)
+}
+
+.local-search input:hover {
+    box-shadow: 0 0 18px 0 rgba(0,0,0,0.1)
+}
+
+.local-search input:focus {
+    border-color: #d9d9d9
+}
+/* dialog */
+.dialog {
+    transform: none;
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+    opacity: 1
+}
+
+.dialog-enter {
+    transform: scale(0.9, 0.9);
+    opacity: 0.1
+}
+
+.dialog-overlay {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5)
+}
+
+.editor {
+    min-height: 300px;
+    height: calc(100% - 160px );
+    position: relative;
+    margin: 80px;
+    background-color: #f7f7f8;
+    padding: 16px 20px;
+    box-shadow: 0 2px 25px rgba(0,0,0,0.2)
+}
+
+.editor .editor-container {
+    float: none;
+    position: absolute;
+    left: 122px;
+    top: 18px;
+    font-size: 15px;
+    background-size: 20px;
+    background-position: right 3px;
+    padding-right: 28px
+}
+
+.edit-area {
+    position: absolute;
+    margin: 0;
+    top: 55px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fefefe;
+    border-top: 1px solid #e4e4e4
+}
+
+.edit-area>div {
+    padding: 0;
+    height: 100%
+}
+
+.editor .pane {
+    position: relative;
+    border-bottom: 1px solid #e4e4e4;
+    box-sizing: border-box;
+    height: 10%
+}
+
+.editor .pane+.pane {
+    height: 90%
+}
+
+.editor .pane:only-child {
+    height: 100%
+}
+
+.editor .pane-preview {
+    height: 100%;
+    border-left: 1px solid #e4e4e4;
+    position: relative;
+    padding: 30px 10px 10px
+}
+
+.editor h3 {
+    margin: 0
+}
+
+.editor h5 {
+    text-align: right
+}
+
+.editor .CodeMirror {
+    height: 100%;
+    background-color: transparent;
+    font-size: 13px;
+    line-height: 1.5
+}
+
+.editor iframe {
+    height: 100% !important
+}

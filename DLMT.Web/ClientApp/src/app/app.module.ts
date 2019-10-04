@@ -29,7 +29,8 @@ import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { CaseTypeViewComponent } from './lookup/case-type/case-type-view/case-type-view.component';
 import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/case-type-details.component';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-
+import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
+import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
 
 
 @NgModule({
@@ -57,7 +58,11 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
     HttpClientModule,
     AppRoutingModule,
     GridModule,
-    InputsModule
+    InputsModule,
+    ButtonModule,
+    DropDownButtonModule,
+    WindowModule,
+    DialogModule
   ],
   providers: [
     AppSettingService,

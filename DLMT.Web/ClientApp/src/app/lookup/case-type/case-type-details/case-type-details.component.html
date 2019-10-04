@@ -1,1 +1,12 @@
-<p>case-type-details works!</p>
+<kendo-dialog 
+    [(width)]="windowWidth" 
+    [(height)]="windowHeight" 
+    (close)="close()"
+    title="{{title}}" *ngIf="isReady">
+    <p style="text-align: center; padding-top: 5em;">Your escape pod is now ready.</p>
+
+    <kendo-dialog-actions [layout]="actionsLayout">
+            <button kendoButton (click)="close()" [look]="'outline'">Cancel</button>
+            <button kendoButton (click)="onSubmit()" primary="true" [look]="'outline'">Submit</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

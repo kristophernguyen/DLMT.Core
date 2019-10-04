@@ -9,20 +9,22 @@
     <div class="main-component-container">
         <div class="box box-search">
             <div class="row">
-                <div class="col-10">
-                    <kendo-textbox-container floatingLabel="Search" class="full-width">
-                        <input kendoTextBox />
-                    </kendo-textbox-container>
+                <div class="col-3">
+                    &nbsp;
                 </div>
-                <div class="col-2">
-                    <div>
-                                <button type="button" class="btn btn-primary btn-sm bottomdiv">New Case Type</button>
+                <div class="search-all search-all-new-nav col-6">
+                    <div class="search-input-container">
+                        <input id="local-search" placeholder="Search Case Type ..." name="s" />
                     </div>
+                </div>
+                <div class="col-3">
+                    &nbsp;
                 </div>
             </div>
         </div>
         <div class="box box-grid">
-            <app-case-type-view class="grid-full-height"></app-case-type-view>
+            <app-case-type-view class="grid-full-height" (actionClick)="gridActionClick($event)"></app-case-type-view>
         </div>
     </div>
 </div><!-- container -->
+<app-case-type-details [id]="caseTypeId" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)"></app-case-type-details>

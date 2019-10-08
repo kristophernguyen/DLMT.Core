@@ -9,7 +9,8 @@ export const environment = {
   auth_server: 'https://localhost:44306',
   app_uri: 'http://localhost:4200',
   api_url:{
-    appsetting:'https://localhost:44396'
+    appsetting:'https://localhost:44396',
+    dlmt:'https://localhost:44300'
   }
 };
 

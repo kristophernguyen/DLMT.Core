@@ -1,7 +1,7 @@
 export interface IKendoView{
-    isSorable:string;
-    isFilterable:string;
+    isSortable:boolean;
+    isFilterable:boolean;
     pageSize:number;
-    pageable:string;
-    groupable:string;
+    pageable:boolean;
+    groupable:boolean;
 }

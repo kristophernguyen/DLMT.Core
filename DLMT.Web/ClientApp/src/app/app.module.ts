@@ -21,7 +21,7 @@ import { MessageService } from './services/common/message-service';
 import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.component';
 import { ErrorComponent } from './common/error/error.component';
 import { TokenInterceptor } from './services/common/token-interceptor';
-import { AppSettingApiUrl } from './common/config/app-config';
+import { AppSettingApiUrl, DlmtApiUrl } from './common/config/app-config';
 import { environment } from 'src/environments/environment';
 import { AppSettingApi } from './services/apis/app-setting-api';
 import { GridModule } from '@progress/kendo-angular-grid';
@@ -31,6 +31,8 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
+import { DlmtApi } from './services/apis/dlmt-api';
+import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper';
 
 
 @NgModule({
@@ -74,7 +76,10 @@ import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
       multi: true
     },
     AppSettingApi,
-    {provide: AppSettingApiUrl, useValue:environment.api_url.appsetting}
+    DlmtApi,
+    DlmtApiHelperService,
+    { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
+    { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],
   bootstrap: [AppComponent]
 })

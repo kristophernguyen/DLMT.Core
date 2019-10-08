@@ -163,7 +163,7 @@ export class AppSettingApi {
     /**
      * @return Success
      */
-    viewSetting(id: number): Observable<GetViewSettingResponse> {
+    viewSetting(id: number): Observable<GetViewByIdResponse> {
         let url_ = this.baseUrl + "/api/ViewSetting/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -185,14 +185,14 @@ export class AppSettingApi {
                 try {
                     return this.processViewSetting(<any>response_);
                 } catch (e) {
-                    return <Observable<GetViewSettingResponse>><any>_observableThrow(e);
+                    return <Observable<GetViewByIdResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<GetViewSettingResponse>><any>_observableThrow(response_);
+                return <Observable<GetViewByIdResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processViewSetting(response: HttpResponseBase): Observable<GetViewSettingResponse> {
+    protected processViewSetting(response: HttpResponseBase): Observable<GetViewByIdResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -203,7 +203,7 @@ export class AppSettingApi {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetViewSettingResponse.fromJS(resultData200);
+            result200 = GetViewByIdResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status === 400) {
@@ -224,7 +224,7 @@ export class AppSettingApi {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetViewSettingResponse>(<any>null);
+        return _observableOf<GetViewByIdResponse>(<any>null);
     }
 }
 
@@ -744,6 +744,7 @@ export class ViewAttributeDTO implements IViewAttributeDTO {
     viewSchemaAttributeId?: number;
     attributeKey?: string;
     attributeValue?: string;
+    attributeType?: string;
 
     constructor(data?: IViewAttributeDTO) {
         if (data) {
@@ -759,6 +760,7 @@ export class ViewAttributeDTO implements IViewAttributeDTO {
             this.viewSchemaAttributeId = data["viewSchemaAttributeId"];
             this.attributeKey = data["attributeKey"];
             this.attributeValue = data["attributeValue"];
+            this.attributeType = data["attributeType"];
         }
     }
 
@@ -774,6 +776,7 @@ export class ViewAttributeDTO implements IViewAttributeDTO {
         data["viewSchemaAttributeId"] = this.viewSchemaAttributeId;
         data["attributeKey"] = this.attributeKey;
         data["attributeValue"] = this.attributeValue;
+        data["attributeType"] = this.attributeType;
         return data; 
     }
 }
@@ -782,6 +785,7 @@ export interface IViewAttributeDTO {
     viewSchemaAttributeId?: number;
     attributeKey?: string;
     attributeValue?: string;
+    attributeType?: string;
 }
 
 export class ColumnDTO implements IColumnDTO {
@@ -895,8 +899,6 @@ export interface IColumnDTO {
 export class ViewDTO implements IViewDTO {
     viewSchemaId?: number;
     viewName?: string;
-    serverSorting?: boolean;
-    serverFiltering?: boolean;
     viewAttributes?: ViewAttributeDTO[];
     columns?: ColumnDTO[];
     createdBy?: number;
@@ -918,8 +920,6 @@ export class ViewDTO implements IViewDTO {
         if (data) {
             this.viewSchemaId = data["viewSchemaId"];
             this.viewName = data["viewName"];
-            this.serverSorting = data["serverSorting"];
-            this.serverFiltering = data["serverFiltering"];
             if (Array.isArray(data["viewAttributes"])) {
                 this.viewAttributes = [] as any;
                 for (let item of data["viewAttributes"])
@@ -949,8 +949,6 @@ export class ViewDTO implements IViewDTO {
         data = typeof data === 'object' ? data : {};
         data["viewSchemaId"] = this.viewSchemaId;
         data["viewName"] = this.viewName;
-        data["serverSorting"] = this.serverSorting;
-        data["serverFiltering"] = this.serverFiltering;
         if (Array.isArray(this.viewAttributes)) {
             data["viewAttributes"] = [];
             for (let item of this.viewAttributes)
@@ -973,8 +971,6 @@ export class ViewDTO implements IViewDTO {
 export interface IViewDTO {
     viewSchemaId?: number;
     viewName?: string;
-    serverSorting?: boolean;
-    serverFiltering?: boolean;
     viewAttributes?: ViewAttributeDTO[];
     columns?: ColumnDTO[];
     createdBy?: number;
@@ -984,10 +980,83 @@ export interface IViewDTO {
     statusId?: number;
 }
 
-export class GetViewSettingResponse implements IGetViewSettingResponse {
-    result?: ViewDTO;
+export class ViewSettingVM implements IViewSettingVM {
+    groupable?: boolean | undefined;
+    sortable?: boolean | undefined;
+    filterable?: boolean | undefined;
+    pageSize?: number | undefined;
+    pageSizes?: string[];
+    pageable?: boolean | undefined;
+    scrollable?: boolean | undefined;
+    skip?: number;
 
-    constructor(data?: IGetViewSettingResponse) {
+    constructor(data?: IViewSettingVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.groupable = data["groupable"];
+            this.sortable = data["sortable"];
+            this.filterable = data["filterable"];
+            this.pageSize = data["pageSize"];
+            if (Array.isArray(data["pageSizes"])) {
+                this.pageSizes = [] as any;
+                for (let item of data["pageSizes"])
+                    this.pageSizes!.push(item);
+            }
+            this.pageable = data["pageable"];
+            this.scrollable = data["scrollable"];
+            this.skip = data["skip"];
+        }
+    }
+
+    static fromJS(data: any): ViewSettingVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new ViewSettingVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["groupable"] = this.groupable;
+        data["sortable"] = this.sortable;
+        data["filterable"] = this.filterable;
+        data["pageSize"] = this.pageSize;
+        if (Array.isArray(this.pageSizes)) {
+            data["pageSizes"] = [];
+            for (let item of this.pageSizes)
+                data["pageSizes"].push(item);
+        }
+        data["pageable"] = this.pageable;
+        data["scrollable"] = this.scrollable;
+        data["skip"] = this.skip;
+        return data; 
+    }
+}
+
+export interface IViewSettingVM {
+    groupable?: boolean | undefined;
+    sortable?: boolean | undefined;
+    filterable?: boolean | undefined;
+    pageSize?: number | undefined;
+    pageSizes?: string[];
+    pageable?: boolean | undefined;
+    scrollable?: boolean | undefined;
+    skip?: number;
+}
+
+export class GetViewByIdResponse implements IGetViewByIdResponse {
+    result?: ViewDTO;
+    viewSetting?: ViewSettingVM;
+
+    constructor(data?: IGetViewByIdResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -999,12 +1068,13 @@ export class GetViewSettingResponse implements IGetViewSettingResponse {
     init(data?: any) {
         if (data) {
             this.result = data["result"] ? ViewDTO.fromJS(data["result"]) : <any>undefined;
+            this.viewSetting = data["viewSetting"] ? ViewSettingVM.fromJS(data["viewSetting"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): GetViewSettingResponse {
+    static fromJS(data: any): GetViewByIdResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new GetViewSettingResponse();
+        let result = new GetViewByIdResponse();
         result.init(data);
         return result;
     }
@@ -1012,12 +1082,14 @@ export class GetViewSettingResponse implements IGetViewSettingResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["result"] = this.result ? this.result.toJSON() : <any>undefined;
+        data["viewSetting"] = this.viewSetting ? this.viewSetting.toJSON() : <any>undefined;
         return data; 
     }
 }
 
-export interface IGetViewSettingResponse {
+export interface IGetViewByIdResponse {
     result?: ViewDTO;
+    viewSetting?: ViewSettingVM;
 }
 
 export class ApiException extends Error {

@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { AppSettingApi } from 'src/app/services/apis/app-setting-api';
+import { AppSettingApi, ViewSettingVM } from 'src/app/services/apis/app-setting-api';
 import { IColumn } from 'src/app/model/kendo-column';
 import { IKendoView } from 'src/app/model/kendo-view-att';
+import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
+import { State } from '@progress/kendo-data-query';
+import { Observable } from 'rxjs/internal/Observable';
+import { DlmtApiHelperService } from 'src/app/services/grid-helper/dlmt-service-helper';
 
 @Component({
   selector: 'app-case-type-view',
@@ -12,13 +16,15 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   @Output() actionClick = new EventEmitter();
 
   isReady: boolean;
+  viewData: Observable<GridDataResult>;
   viewSettingSub: any;
-  public gridData: any[] = [];
   columns: IColumn[] = [];
-  view: IKendoView;
+  viewSetting: ViewSettingVM;
   toolbarPosition = "top";
   exportSettings: any[] = [];
-  constructor(private appSettingApi: AppSettingApi) { }
+  pageSizes: any[] = [];
+
+  constructor(private appSettingApi: AppSettingApi, private dlmtService: DlmtApiHelperService) { }
   ngOnDestroy(): void {
     if (this.viewSettingSub) {
       this.viewSettingSub.unsubscribe();
@@ -49,21 +55,25 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
             tempColumn.format = tempServerColumn.columnFormat || '';
             this.columns.push(tempColumn);
           }
-          if (x.result.viewAttributes) {
-            this.view = {} as IKendoView;
-            for (let i = 0; i < x.result.viewAttributes.length; i++) {
-              let tempItem = x.result.viewAttributes[i];
-              this.view[tempItem.attributeKey] = tempItem.attributeKey
-            }
+          if (x.viewSetting) {
+            this.viewSetting = x.viewSetting;
           }
         }
+        this.viewData = this.dlmtService;
         this.isReady = true;
+        let initialState = { skip: 0, take: this.viewSetting.pageSize} as State;
+        this.dlmtService.getAllCaseType(initialState);
       },
       err => {
 
       }
     );
   }
+  public dataStateChange(state: DataStateChangeEvent): void {
+    this.viewSetting.skip = state.skip;
+    this.dlmtService.getAllCaseType(state);
+  }
+  
   newCaseTypeClick(){
     this.actionClick.emit({action: 'edit', data: {id: 0}});
   }

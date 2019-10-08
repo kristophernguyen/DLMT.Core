@@ -5,3 +5,16 @@
 .action-margin-right{
     margin-right:15px;
 }
+.grid-max-height{
+    height: calc(100vh - (7.5rem * 2));
+}
+.k-i-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 64px;
+    background-color: rgba(255,255,255,.3);
+    color: #1b84e7;
+  }

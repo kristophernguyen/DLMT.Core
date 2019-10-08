@@ -19,7 +19,9 @@ app-root {
   app-case-type{
       height:100%;
   }
-
+  app-site-layout{
+      overflow-y:hidden;
+  }
 
 .main-component-container{
     height: 100%;

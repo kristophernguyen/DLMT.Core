@@ -7,5 +7,8 @@ namespace DLMT.Biz.Interface
     public interface ICaseTypeManager
     {
         Task<CaseTypeGetAllResponse> GetAllAsync(CaseTypeGetAllRequest req);
+        Task<CaseTypeDeleteByIdResponse> DeleteCaseTypeByIdAsync(CaseTypeDeleteByIdRequest req);
+        Task<CaseTypeGetByIdResponse> GetCaseTypeByIdAsync(CaseTypeGetByIdRequest req);
+        Task<CaseTypeUpdateResponse> UpdateCaseTypeAsync(CaseTypeUpdateRequest req);
     }
 }

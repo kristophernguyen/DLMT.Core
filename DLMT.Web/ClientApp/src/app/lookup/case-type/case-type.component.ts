@@ -53,7 +53,7 @@ export class CaseTypeComponent implements OnInit {
   closeDialogClick($event){
     this.showEditDialog = false;
     if ($event && $event.data.reload){
-      //reload
+      this.caseTypeViewComponent.reloadView();
     }
   }
 

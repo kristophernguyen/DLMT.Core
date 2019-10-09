@@ -7,6 +7,6 @@ namespace DLMT.Common.Request
     {
         public string CurrentUser { get; set; }
         public IList<string> Roles { get; set; }
-        public ViewPredicate Predicate { get; set; }
+        
     }
 }

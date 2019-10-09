@@ -16,7 +16,7 @@ export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
         if (state){
             req.predicate = this.mapPredicate(state);
         }
-        this.dlmtApi.caseType(req)
+        this.dlmtApi.all(req)
         .subscribe(x =>{
             this.loading = false;
             let result = (<GridDataResult>{
@@ -47,16 +47,19 @@ export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
                 predicate.filter.filterQueries= [];
                 let stateFilters = state.filter.filters;
                 for(let i = 0; i < stateFilters.length; i++){
-                    let tempFilter = new FilterQuery();
-                    tempFilter.filterOperator = "or";
-                    tempFilter.dataType = "string";
-                    tempFilter.columnName =  stateFilters[i].field;
-                    tempFilter.conditions = [];
-                    let tempFilterCondition = new FilterCondition(); 
-                    tempFilterCondition.searchKey = stateFilters[i].value;
-                    tempFilterCondition.filterType = "contains";
-                    tempFilter.conditions.push(tempFilterCondition);
-                    predicate.filter.filterQueries.push(tempFilter);
+                    if (stateFilters[i].value && stateFilters[i].value.length > 0){
+                        let tempFilter = new FilterQuery();
+                        tempFilter.filterOperator = "or";
+                        tempFilter.dataType = "string";
+                        tempFilter.columnName =  stateFilters[i].field;
+                        tempFilter.conditions = [];
+                        let tempFilterCondition = new FilterCondition(); 
+                        tempFilterCondition.searchKey = stateFilters[i].value;
+                        tempFilterCondition.filterType = "contains";
+                        tempFilter.conditions.push(tempFilterCondition);
+                        predicate.filter.filterQueries.push(tempFilter);
+                    }
+                    
                 } 
             }
         }

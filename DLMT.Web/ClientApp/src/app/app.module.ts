@@ -35,7 +35,7 @@ import { DlmtApi } from './services/apis/dlmt-api';
 import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -70,7 +70,8 @@ import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
     ButtonModule,
     DropDownButtonModule,
     WindowModule,
-    DialogModule
+    DialogModule,
+    MatProgressBarModule
   ],
   providers: [
     AppSettingService,

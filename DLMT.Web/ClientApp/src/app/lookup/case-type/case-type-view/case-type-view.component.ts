@@ -26,15 +26,19 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   exportSettings: any[] = [];
   pageSizes: any[] = [];
   public state: State = {};
-
+  deleteSub:any;
   constructor(
     private appSettingApi: AppSettingApi,
     private dlmtApi: DlmtApi,
     private dlmtService: DlmtApiHelperService) { }
   ngOnDestroy(): void {
-    if (this.viewSettingSub) {
+    if (this.viewSettingSub && this.viewSettingSub.hasOwnProperty('unsubscribe')) {
       this.viewSettingSub.unsubscribe();
     }
+    if (this.deleteSub && this.deleteSub.hasOwnProperty('unsubscribe')) {
+      this.deleteSub.unsubscribe();
+    }
+    
   }
   ngOnInit() {
     this.initView();
@@ -106,12 +110,12 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
     this.dlmtService.getAllCaseType(this.state);
   }
   public editHandler({sender, rowIndex, dataItem}) {
-    if (rowIndex && rowIndex >= 0){
+    if (rowIndex >= 0){
       this.actionClick.emit({action: 'edit', data: {doc: dataItem}});
     }
   }
   public deleteHandler({ sender, dataItem }) {
-    if (dataItem && dataItem.id >= 0){
+    if (dataItem.id >= 0){
       this.currentRemoveDoc = dataItem;
       this.openConfirmDialog();
     }
@@ -124,12 +128,23 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
 
   openConfirmDialog(){
     this.confirmDialog = true;
+    
+  }
+  reloadView(){
+    this.dlmtService.getAllCaseType(this.state);
   }
   closeConfirmDialog(){
     this.confirmDialog = false;
   }
   confirmDelete() {
-    
+    this.deleteSub = this.dlmtApi.delete(this.currentRemoveDoc.id).subscribe(
+      x=>{
+        if (!x.hasError){
+          this.reloadView();
+        }
+        this.closeConfirmDialog();
+      }
+    );
   }
   newCaseTypeClick(){
     this.actionClick.emit({action: 'edit', data: {id: 0}});

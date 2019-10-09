@@ -30,8 +30,8 @@ export class DlmtApi {
      * @param body (optional) 
      * @return Success
      */
-    caseType(body: CaseTypeGetAllRequest | undefined): Observable<CaseTypeGetAllResponse> {
-        let url_ = this.baseUrl + "/api/CaseType";
+    all(body: CaseTypeGetAllRequest | undefined): Observable<CaseTypeGetAllResponse> {
+        let url_ = this.baseUrl + "/api/CaseType/fetch/all";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -47,11 +47,11 @@ export class DlmtApi {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCaseType(response_);
+            return this.processAll(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCaseType(<any>response_);
+                    return this.processAll(<any>response_);
                 } catch (e) {
                     return <Observable<CaseTypeGetAllResponse>><any>_observableThrow(e);
                 }
@@ -60,7 +60,7 @@ export class DlmtApi {
         }));
     }
 
-    protected processCaseType(response: HttpResponseBase): Observable<CaseTypeGetAllResponse> {
+    protected processAll(response: HttpResponseBase): Observable<CaseTypeGetAllResponse> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -93,6 +93,209 @@ export class DlmtApi {
             }));
         }
         return _observableOf<CaseTypeGetAllResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    fetch(id: number): Observable<CaseTypeGetByIdResponse> {
+        let url_ = this.baseUrl + "/api/CaseType/fetch/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFetch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFetch(<any>response_);
+                } catch (e) {
+                    return <Observable<CaseTypeGetByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CaseTypeGetByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFetch(response: HttpResponseBase): Observable<CaseTypeGetByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CaseTypeGetByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CaseTypeGetByIdResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(id: number): Observable<CaseTypeDeleteByIdResponse> {
+        let url_ = this.baseUrl + "/api/CaseType/delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<CaseTypeDeleteByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CaseTypeDeleteByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<CaseTypeDeleteByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CaseTypeDeleteByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CaseTypeDeleteByIdResponse>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    update(body: CaseTypeUpdateRequest | undefined): Observable<CaseTypeUpdateResponse> {
+        let url_ = this.baseUrl + "/api/CaseType/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<CaseTypeUpdateResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CaseTypeUpdateResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<CaseTypeUpdateResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CaseTypeUpdateResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CaseTypeUpdateResponse>(<any>null);
     }
 }
 
@@ -369,9 +572,9 @@ export interface IViewPredicate {
 }
 
 export class CaseTypeGetAllRequest implements ICaseTypeGetAllRequest {
+    predicate?: ViewPredicate;
     currentUser?: string | undefined;
     roles?: string[] | undefined;
-    predicate?: ViewPredicate;
 
     constructor(data?: ICaseTypeGetAllRequest) {
         if (data) {
@@ -384,13 +587,13 @@ export class CaseTypeGetAllRequest implements ICaseTypeGetAllRequest {
 
     init(data?: any) {
         if (data) {
+            this.predicate = data["predicate"] ? ViewPredicate.fromJS(data["predicate"]) : <any>undefined;
             this.currentUser = data["currentUser"];
             if (Array.isArray(data["roles"])) {
                 this.roles = [] as any;
                 for (let item of data["roles"])
                     this.roles!.push(item);
             }
-            this.predicate = data["predicate"] ? ViewPredicate.fromJS(data["predicate"]) : <any>undefined;
         }
     }
 
@@ -403,21 +606,21 @@ export class CaseTypeGetAllRequest implements ICaseTypeGetAllRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["predicate"] = this.predicate ? this.predicate.toJSON() : <any>undefined;
         data["currentUser"] = this.currentUser;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
                 data["roles"].push(item);
         }
-        data["predicate"] = this.predicate ? this.predicate.toJSON() : <any>undefined;
         return data; 
     }
 }
 
 export interface ICaseTypeGetAllRequest {
+    predicate?: ViewPredicate;
     currentUser?: string | undefined;
     roles?: string[] | undefined;
-    predicate?: ViewPredicate;
 }
 
 export class CaseTypeDTO implements ICaseTypeDTO {
@@ -588,6 +791,210 @@ export class CaseTypeGetAllResponse implements ICaseTypeGetAllResponse {
 export interface ICaseTypeGetAllResponse {
     result?: CaseTypeDTO[] | undefined;
     total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class CaseTypeGetByIdResponse implements ICaseTypeGetByIdResponse {
+    data?: CaseTypeDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: ICaseTypeGetByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.data = data["data"] ? CaseTypeDTO.fromJS(data["data"]) : <any>undefined;
+            this.hasError = data["hasError"];
+            if (Array.isArray(data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CaseTypeGetByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CaseTypeGetByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICaseTypeGetByIdResponse {
+    data?: CaseTypeDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class CaseTypeDeleteByIdResponse implements ICaseTypeDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: ICaseTypeDeleteByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.hasError = data["hasError"];
+            if (Array.isArray(data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CaseTypeDeleteByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CaseTypeDeleteByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICaseTypeDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class CaseTypeUpdateRequest implements ICaseTypeUpdateRequest {
+    caseType?: CaseTypeDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: ICaseTypeUpdateRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.caseType = data["caseType"] ? CaseTypeDTO.fromJS(data["caseType"]) : <any>undefined;
+            this.currentUser = data["currentUser"];
+            if (Array.isArray(data["roles"])) {
+                this.roles = [] as any;
+                for (let item of data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): CaseTypeUpdateRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CaseTypeUpdateRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["caseType"] = this.caseType ? this.caseType.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface ICaseTypeUpdateRequest {
+    caseType?: CaseTypeDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class CaseTypeUpdateResponse implements ICaseTypeUpdateResponse {
+    data?: CaseTypeDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: ICaseTypeUpdateResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.data = data["data"] ? CaseTypeDTO.fromJS(data["data"]) : <any>undefined;
+            this.hasError = data["hasError"];
+            if (Array.isArray(data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CaseTypeUpdateResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CaseTypeUpdateResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICaseTypeUpdateResponse {
+    data?: CaseTypeDTO;
     hasError?: boolean;
     errorMsgs?: ErrorDTO[] | undefined;
 }

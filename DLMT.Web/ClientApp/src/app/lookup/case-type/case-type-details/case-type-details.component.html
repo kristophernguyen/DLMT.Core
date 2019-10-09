@@ -3,7 +3,11 @@
     [(height)]="windowHeight" 
     (close)="close()"
     title="{{title}}" *ngIf="isReady">
-    <p style="text-align: center; padding-top: 5em;">Your escape pod is now ready.</p>
+    <div class="casetype-container">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
 
     <kendo-dialog-actions [layout]="actionsLayout">
             <button kendoButton (click)="close()" [look]="'outline'">Cancel</button>

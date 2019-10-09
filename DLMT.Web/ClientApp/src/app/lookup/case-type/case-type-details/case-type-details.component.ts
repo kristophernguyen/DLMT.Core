@@ -6,7 +6,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./case-type-details.component.css']
 })
 export class CaseTypeDetailsComponent implements OnInit {
-  @Input('Id') id:number;
+ 
+  @Input() doc:any;
   @Output() closeDialogClick = new EventEmitter();
 
   isReady = false;
@@ -24,15 +25,17 @@ export class CaseTypeDetailsComponent implements OnInit {
   }
   initFormData(){
     this.title = "New Case Type";
-    if (this.id){
+    if (this.doc && this.doc.id > 0){
       this.title = "Edit";
-      
     }
-    else{
-      this.isReady = true;
-    }
+    this.isReady = true;
+  }
+  resetForm(){
+    this.doc = {};
+    this.isReady = false;
   }
   close(){
+    this.resetForm();
     this.closeDialogClick.emit({action: 'closeDialog', data: {reload: this.reloadFlag}})
   }
 

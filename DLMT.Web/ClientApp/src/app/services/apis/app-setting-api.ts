@@ -989,6 +989,7 @@ export class ViewSettingVM implements IViewSettingVM {
     pageable?: boolean | undefined;
     scrollable?: boolean | undefined;
     skip?: number;
+    multiSort?: boolean | undefined;
 
     constructor(data?: IViewSettingVM) {
         if (data) {
@@ -1013,6 +1014,7 @@ export class ViewSettingVM implements IViewSettingVM {
             this.pageable = data["pageable"];
             this.scrollable = data["scrollable"];
             this.skip = data["skip"];
+            this.multiSort = data["multiSort"];
         }
     }
 
@@ -1037,6 +1039,7 @@ export class ViewSettingVM implements IViewSettingVM {
         data["pageable"] = this.pageable;
         data["scrollable"] = this.scrollable;
         data["skip"] = this.skip;
+        data["multiSort"] = this.multiSort;
         return data; 
     }
 }
@@ -1050,6 +1053,7 @@ export interface IViewSettingVM {
     pageable?: boolean | undefined;
     scrollable?: boolean | undefined;
     skip?: number;
+    multiSort?: boolean | undefined;
 }
 
 export class GetViewByIdResponse implements IGetViewByIdResponse {

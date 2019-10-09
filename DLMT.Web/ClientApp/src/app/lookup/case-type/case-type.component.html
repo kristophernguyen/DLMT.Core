@@ -7,24 +7,29 @@
         <h6 class="slim-pagetitle">Case Type</h6>
     </div><!-- slim-pageheader -->
     <div class="main-component-container">
-        <div class="box box-search">
-            <div class="row">
-                <div class="col-3">
-                    &nbsp;
-                </div>
-                <div class="search-all search-all-new-nav col-6">
-                    <div class="search-input-container">
-                        <input id="local-search" placeholder="Search Case Type ..." name="s" />
+        <form class="search-view-form" [formGroup]="searchDataFormGroup" novalidate>
+            <div class="box box-search">
+                <div class="row">
+                    <div class="col-3">
+                        &nbsp;
+                    </div>
+                    <div class="search-all search-all-new-nav col-6">
+                        <div class="search-input-container">
+                            <input id="local-search" placeholder="Search Case Type ..." name="s"
+                                formControlName="searchInput" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        &nbsp;
                     </div>
                 </div>
-                <div class="col-3">
-                    &nbsp;
-                </div>
             </div>
-        </div>
+        </form>
         <div class="box box-grid">
-            <app-case-type-view class="grid-full-height" (actionClick)="gridActionClick($event)"></app-case-type-view>
+            <app-case-type-view class="grid-full-height" (actionClick)="gridActionClick($event)" #caseTypeViewComponent>
+            </app-case-type-view>
         </div>
     </div>
 </div><!-- container -->
-<app-case-type-details [id]="caseTypeId" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)"></app-case-type-details>
+<app-case-type-details  [doc]="doc" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)">
+</app-case-type-details>

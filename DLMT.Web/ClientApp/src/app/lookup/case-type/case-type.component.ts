@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
+import {FormControl} from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CaseTypeViewComponent } from './case-type-view/case-type-view.component';
 
 @Component({
   selector: 'app-case-type',
@@ -6,19 +10,44 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./case-type.component.css']
 })
 export class CaseTypeComponent implements OnInit {
-  caseTypeId = 0;
+
+  @ViewChild('caseTypeViewComponent', {static: false}) caseTypeViewComponent: CaseTypeViewComponent;
+
+  doc:any;
   showEditDialog = false;
+  searchDataFormGroup: FormGroup;
   
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-
+    this.initForm();
+  }
+  initForm(){
+    this.searchDataFormGroup = this.formBuilder.group({
+      'searchInput': new FormControl()
+    });
+    this.searchDataFormGroup.controls['searchInput'].valueChanges
+    .pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    )
+    .subscribe(
+      x=>{
+        this.caseTypeViewComponent.searchView(x);
+      }
+    )
   }
   gridActionClick($event){
     this.showEditDialog = false;
+    this.doc = {};
+
     if ($event && $event.action && $event.action.length > 0){
-      this.caseTypeId = $event.data.id || 0;
-      this.showEditDialog = true;
+      if ($event.data && $event.data.doc){
+        this.doc = $event.data.doc;
+      }
+      if ($event.action === 'edit'){
+        this.showEditDialog = true;
+      }
     }
   }
   closeDialogClick($event){

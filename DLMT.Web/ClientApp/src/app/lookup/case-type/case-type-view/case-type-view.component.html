@@ -1,27 +1,34 @@
 <kendo-grid 
+#grid="kendoGrid"
 [data]="viewData | async" 
 (dataStateChange)="dataStateChange($event)"
 scrollable="viewSetting.scrollable"
-[skip]="viewSetting.skip"
+[skip]="state.skip"
 [pageSize]="viewSetting.pageSize" 
+[sort]="state.sort"
 [pageable]="true"
-[sortable]="viewSetting.sortable" 
+[sortable]="{
+  allowUnsort: false,
+  mode: viewSetting.multiSort ? 'multiple' : 'single'
+  }"
+  (edit)="editHandler($event)"
+  (remove)="deleteHandler($event)"
 class="grid-full-height grid-max-height"
   *ngIf="isReady">
   <ng-template kendoGridToolbarTemplate [position]="toolbarPosition">
     <div style="float:right;">
-      <kendo-dropdownbutton [look]="'outline'" [data]="exportSettings" [iconClass]="'fa fa-download'" class="action-margin-right">&nbsp;&nbsp;Export
-      </kendo-dropdownbutton>
+      <button kendoButton [look]="'outline'" [iconClass]="'fa fa-file-excel-o'" class="action-margin-right" (click)="exportView($event)">&nbsp;&nbsp;Export to Excel
+      </button>
       <button kendoButton [look]="'outline'" [iconClass]="'fa fa-pencil-square-o'" [primary]="true"
         (click)="newCaseTypeClick()">&nbsp;&nbsp;New Case Type</button>
     </div>
   </ng-template>
   <kendo-grid-column *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}" width="{{column.width}}"
     format="{{column.format}}" filter="{{column.type}}"></kendo-grid-column>
-    <kendo-grid-command-column title="command" width="220">
+    <kendo-grid-command-column title="Action" width="220">
         <ng-template kendoGridCellTemplate>
-            <button kendoGridEditCommand class="k-primary">Edit</button>
-            <button kendoGridRemoveCommand>Remove</button>
+            <button kendoGridEditCommand class="k-primary" [iconClass]="'fa fa-pencil-square-o '" [look]="'outline'" (selectedChange)="docEdit($event)">&nbsp;&nbsp;Edit</button>
+            <button kendoGridRemoveCommand [iconClass]="'fa fa-trash'" [look]="'outline'" >&nbsp;&nbsp;Remove</button>
         </ng-template>
     </kendo-grid-command-column>
     <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
@@ -29,9 +36,14 @@ class="grid-full-height grid-max-height"
         <kendo-pager-numeric-buttons [buttonCount]="5"></kendo-pager-numeric-buttons>
         <kendo-pager-next-buttons></kendo-pager-next-buttons>
         <kendo-pager-info></kendo-pager-info>
-        <!-- <kendo-pager-page-sizes
-        [pageSizes]="viewSetting.pageSizes">
-      </kendo-pager-page-sizes> -->
      </ng-template>
+     <kendo-grid-excel fileName="caseTypes.xlsx" ></kendo-grid-excel>
 </kendo-grid>
+<kendo-dialog title="Please confirm" *ngIf="confirmDialog" (close)="closeConfirmDialog()" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to delete this record?</p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="closeConfirmDialog()">No</button>
+        <button kendoButton (click)="confirmDelete()" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
 <div *ngIf="viewData && viewData.loading" class="k-i-loading"></div>

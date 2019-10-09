@@ -24,7 +24,7 @@ import { TokenInterceptor } from './services/common/token-interceptor';
 import { AppSettingApiUrl, DlmtApiUrl } from './common/config/app-config';
 import { environment } from 'src/environments/environment';
 import { AppSettingApi } from './services/apis/app-setting-api';
-import { GridModule } from '@progress/kendo-angular-grid';
+import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { CaseTypeViewComponent } from './lookup/case-type/case-type-view/case-type-view.component';
 import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/case-type-details.component';
@@ -33,6 +33,8 @@ import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-butt
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
 import { DlmtApi } from './services/apis/dlmt-api';
 import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
 
 
 @NgModule({
@@ -57,8 +59,12 @@ import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    ExcelModule,
+    ExcelExportModule,
     GridModule,
     InputsModule,
     ButtonModule,

@@ -1,8 +1,8 @@
 ﻿using DLMT.Common.ViewAction;
 
-namespace DLMT.Common.Request
+namespace DLMT.Common.Request.ZoneArea
 {
-    public class CaseTypeGetAllRequest : BaseRequest
+    public class ZoneAreaGetAllRequest : BaseRequest
     {
         public ViewPredicate Predicate { get; set; }
     }

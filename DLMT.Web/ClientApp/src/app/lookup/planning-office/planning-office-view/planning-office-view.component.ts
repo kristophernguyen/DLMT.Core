@@ -147,7 +147,7 @@ export class PlanningOfficeViewComponent implements OnInit, OnDestroy {
       }
     );
   }
-  newCaseTypeClick(){
+  newDocClick(){
     this.actionClick.emit({action: 'edit', data: {id: 0}});
   }
 

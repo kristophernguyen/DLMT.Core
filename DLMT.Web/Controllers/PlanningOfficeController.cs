@@ -60,9 +60,5 @@ namespace DLMT.Web.Controllers
             var result = await _planningOfficeManager.UpdatePlanningOfficeAsync(req);
             return Ok(result);
         }
-
-
-
-
     }
 }

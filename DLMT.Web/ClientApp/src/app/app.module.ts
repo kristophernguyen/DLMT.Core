@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -40,6 +40,11 @@ import { PlanningOfficeComponent } from './lookup/planning-office/planning-offic
 import { PlanningOfficeViewComponent } from './lookup/planning-office/planning-office-view/planning-office-view.component';
 import { PlanningOfficeDetailsComponent } from './lookup/planning-office/planning-office-details/planning-office-details.component';
 import { PlanningOfficeApiHelperService } from './services/grid-helper/planningoffice-service-helper';
+import { ZoneAreaApiHelperService } from './services/grid-helper/zonearea-service-helper';
+import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
+import { ZoneAreaDetailsComponent } from './lookup/zone-area/zone-area-details/zone-area-details.component';
+import { ZoneAreaViewComponent } from './lookup/zone-area/zone-area-view/zone-area-view.component';
+
 
 @NgModule({
   declarations: [
@@ -62,6 +67,9 @@ import { PlanningOfficeApiHelperService } from './services/grid-helper/planningo
     PlanningOfficeComponent,
     PlanningOfficeViewComponent,
     PlanningOfficeDetailsComponent,
+    ZoneAreaComponent,
+    ZoneAreaDetailsComponent,
+    ZoneAreaViewComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -89,10 +97,11 @@ import { PlanningOfficeApiHelperService } from './services/grid-helper/planningo
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,
+    ZoneAreaApiHelperService,
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],

@@ -583,6 +583,290 @@ export class PlanningOfficeClient {
     }
 }
 
+@Injectable()
+export class ZoneAreaClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(DlmtApiUrl) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    all(body: ZoneAreaGetAllRequest | undefined): Observable<ZoneAreaGetAllResponse> {
+        let url_ = this.baseUrl + "/api/ZoneArea/fetch/all";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAll(<any>response_);
+                } catch (e) {
+                    return <Observable<ZoneAreaGetAllResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ZoneAreaGetAllResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAll(response: HttpResponseBase): Observable<ZoneAreaGetAllResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ZoneAreaGetAllResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ZoneAreaGetAllResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    fetch(id: number): Observable<ZoneAreaGetByIdResponse> {
+        let url_ = this.baseUrl + "/api/ZoneArea/fetch/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFetch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFetch(<any>response_);
+                } catch (e) {
+                    return <Observable<ZoneAreaGetByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ZoneAreaGetByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFetch(response: HttpResponseBase): Observable<ZoneAreaGetByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ZoneAreaGetByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ZoneAreaGetByIdResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(id: number): Observable<ZoneAreaDeleteByIdResponse> {
+        let url_ = this.baseUrl + "/api/ZoneArea/delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<ZoneAreaDeleteByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ZoneAreaDeleteByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<ZoneAreaDeleteByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ZoneAreaDeleteByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ZoneAreaDeleteByIdResponse>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    update(body: ZoneAreaUpdateRequest | undefined): Observable<ZoneAreaUpdateResponse> {
+        let url_ = this.baseUrl + "/api/ZoneArea/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<ZoneAreaUpdateResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ZoneAreaUpdateResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<ZoneAreaUpdateResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ZoneAreaUpdateResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ZoneAreaUpdateResponse>(<any>null);
+    }
+}
+
 export class FilterCondition implements IFilterCondition {
     filterType?: string | undefined;
     searchKey?: string | undefined;
@@ -1659,6 +1943,394 @@ export class PlanningOfficeUpdateResponse implements IPlanningOfficeUpdateRespon
 
 export interface IPlanningOfficeUpdateResponse {
     data?: PlanningOfficeDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class ZoneAreaGetAllRequest implements IZoneAreaGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IZoneAreaGetAllRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.predicate = _data["predicate"] ? ViewPredicate.fromJS(_data["predicate"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaGetAllRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaGetAllRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predicate"] = this.predicate ? this.predicate.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class ZoneAreaDTO implements IZoneAreaDTO {
+    id?: number;
+    zone?: string | undefined;
+    name?: string | undefined;
+    zoneName?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+
+    constructor(data?: IZoneAreaDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.zone = _data["zone"];
+            this.name = _data["name"];
+            this.zoneName = _data["zoneName"];
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+            this.statusId = _data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["zone"] = this.zone;
+        data["name"] = this.name;
+        data["zoneName"] = this.zoneName;
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IZoneAreaDTO {
+    id?: number;
+    zone?: string | undefined;
+    name?: string | undefined;
+    zoneName?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+}
+
+export class ZoneAreaGetAllResponse implements IZoneAreaGetAllResponse {
+    result?: ZoneAreaDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IZoneAreaGetAllResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["result"])) {
+                this.result = [] as any;
+                for (let item of _data["result"])
+                    this.result!.push(ZoneAreaDTO.fromJS(item));
+            }
+            this.total = _data["total"];
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaGetAllResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaGetAllResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.result)) {
+            data["result"] = [];
+            for (let item of this.result)
+                data["result"].push(item.toJSON());
+        }
+        data["total"] = this.total;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaGetAllResponse {
+    result?: ZoneAreaDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class ZoneAreaGetByIdResponse implements IZoneAreaGetByIdResponse {
+    data?: ZoneAreaDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IZoneAreaGetByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? ZoneAreaDTO.fromJS(_data["data"]) : <any>undefined;
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaGetByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaGetByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaGetByIdResponse {
+    data?: ZoneAreaDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class ZoneAreaDeleteByIdResponse implements IZoneAreaDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IZoneAreaDeleteByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaDeleteByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaDeleteByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class ZoneAreaUpdateRequest implements IZoneAreaUpdateRequest {
+    zoneArea?: ZoneAreaDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IZoneAreaUpdateRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.zoneArea = _data["zoneArea"] ? ZoneAreaDTO.fromJS(_data["zoneArea"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaUpdateRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaUpdateRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["zoneArea"] = this.zoneArea ? this.zoneArea.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaUpdateRequest {
+    zoneArea?: ZoneAreaDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class ZoneAreaUpdateResponse implements IZoneAreaUpdateResponse {
+    data?: ZoneAreaDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IZoneAreaUpdateResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? ZoneAreaDTO.fromJS(_data["data"]) : <any>undefined;
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaUpdateResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaUpdateResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IZoneAreaUpdateResponse {
+    data?: ZoneAreaDTO;
     hasError?: boolean;
     errorMsgs?: ErrorDTO[] | undefined;
 }

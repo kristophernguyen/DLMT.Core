@@ -4,21 +4,22 @@ import { IColumn } from 'src/app/model/kendo-column';
 import { DataStateChangeEvent, GridDataResult, GridComponent } from '@progress/kendo-angular-grid';
 import { State, SortDescriptor, FilterDescriptor} from '@progress/kendo-data-query';
 import { Observable } from 'rxjs/internal/Observable';
-import { CaseTypeApiHelperService } from 'src/app/services/grid-helper/casetype-service-helper';
-import { CaseTypeClient, CaseTypeDTO } from 'src/app/services/apis/dlmt-api';
+import { PlanningOfficeDTO, PlanningOfficeClient, ZoneAreaClient } from 'src/app/services/apis/dlmt-api';
 import { ViewConstants } from 'src/app/common/constants/viewconst';
+import { PlanningOfficeApiHelperService } from 'src/app/services/grid-helper/planningoffice-service-helper';
+import { ZoneAreaApiHelperService } from 'src/app/services/grid-helper/zonearea-service-helper';
 
 @Component({
-  selector: 'app-case-type-view',
-  templateUrl: './case-type-view.component.html',
-  styleUrls: ['./case-type-view.component.css']
+  selector: 'app-zone-area-view',
+  templateUrl: './zone-area-view.component.html',
+  styleUrls: ['./zone-area-view.component.css']
 })
-export class CaseTypeViewComponent implements OnInit, OnDestroy {
+export class ZoneAreaViewComponent implements OnInit, OnDestroy {
   @Output() actionClick = new EventEmitter();
   @ViewChild('grid', {static: false}) grid: GridComponent;
   isReady: boolean;
   confirmDialog = false;
-  currentRemoveDoc: CaseTypeDTO;
+  currentRemoveDoc: PlanningOfficeDTO;
   viewData: Observable<GridDataResult>;
   viewSettingSub: any;
   columns: IColumn[] = [];
@@ -30,8 +31,8 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   deleteSub:any;
   constructor(
     private viewSettingClient: ViewSettingClient,
-    private caseTypeClient: CaseTypeClient,
-    private caseTypeService: CaseTypeApiHelperService) { }
+    private zoneAreaClient: ZoneAreaClient,
+    private zoneAreaApiHelperService: ZoneAreaApiHelperService) { }
   ngOnDestroy(): void {
     if (this.viewSettingSub && this.viewSettingSub.hasOwnProperty('unsubscribe')) {
       this.viewSettingSub.unsubscribe();
@@ -53,7 +54,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
         text: 'PDF'
       }
     ];
-    this.viewSettingSub = this.viewSettingClient.viewSetting(ViewConstants.CaseType).subscribe(
+    this.viewSettingSub = this.viewSettingClient.viewSetting(ViewConstants.ZoneArea).subscribe(
       x => {
         if (x && x.result) {
 
@@ -72,7 +73,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
             this.viewSetting = x.viewSetting;
           }
         }
-        this.viewData = this.caseTypeService;
+        this.viewData = this.zoneAreaApiHelperService;
         this.isReady = true;
         let tempInitialSort: SortDescriptor[] = [{
           field: 'id',
@@ -83,7 +84,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
           take: this.viewSetting.pageSize,
           sort: tempInitialSort
         } as State;
-        this.caseTypeService.getAllCaseType(this.state);
+        this.zoneAreaApiHelperService.getAllZoneArea(this.state);
       },
       err => {
 
@@ -93,7 +94,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   public dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.viewSetting.skip = state.skip;
-    this.caseTypeService.getAllCaseType(state);
+    this.zoneAreaApiHelperService.getAllZoneArea(state);
   }
   public searchView($event){
     this.state.filter = {
@@ -108,7 +109,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.caseTypeService.getAllCaseType(this.state);
+    this.zoneAreaApiHelperService.getAllZoneArea(this.state);
   }
   public editHandler({sender, rowIndex, dataItem}) {
     if (rowIndex >= 0){
@@ -132,13 +133,13 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
     
   }
   reloadView(){
-    this.caseTypeService.getAllCaseType(this.state);
+    this.zoneAreaApiHelperService.getAllZoneArea(this.state);
   }
   closeConfirmDialog(){
     this.confirmDialog = false;
   }
   confirmDelete() {
-    this.deleteSub = this.caseTypeClient.delete(this.currentRemoveDoc.id).subscribe(
+    this.deleteSub = this.zoneAreaClient.delete(this.currentRemoveDoc.id).subscribe(
       x=>{
         if (!x.hasError){
           this.reloadView();

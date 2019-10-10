@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="slim-pageheader">
+        <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Zone Area</li>
+        </ol>
+        <h6 class="slim-pagetitle">Zone Area</h6>
+    </div><!-- slim-pageheader -->
+    <div class="main-component-container">
+        <form class="search-view-form" [formGroup]="searchDataFormGroup" novalidate>
+            <div class="box box-search">
+                <div class="row">
+                    <div class="col-3">
+                        &nbsp;
+                    </div>
+                    <div class="search-all search-all-new-nav col-6">
+                        <div class="search-input-container">
+                            <input id="local-search" placeholder="Search Zone Area ..." name="s"
+                                formControlName="searchInput" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="box box-grid">
+            <app-zone-area-view class="grid-full-height" (actionClick)="gridActionClick($event)"
+                #zoneAreaViewComponent>
+            </app-zone-area-view>
+        </div>
+    </div>
+</div><!-- container -->
+<app-zone-area-details  [doc]="doc" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)"></app-zone-area-details>

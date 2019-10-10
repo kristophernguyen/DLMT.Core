@@ -36,6 +36,8 @@ namespace DLMT.Web
             services.AddScoped<ICaseTypeManager, CaseTypeManager>();
             services.AddSingleton<IPlanningOfficeRepository, PlanningOfficeRepository>();
             services.AddScoped<IPlanningOfficeManager, PlanningOfficeManager>();
+            services.AddSingleton<IZoneAreaRepository, ZoneAreaRepository>();
+            services.AddScoped<IZoneAreaManager, ZoneAreaManager>();
 
             services.AddAuthentication(options =>
             {

@@ -9,6 +9,7 @@ import { SiteNolayoutComponent } from './_layout/site-nolayout/site-nolayout.com
 import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.component';
 import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { PlanningOfficeComponent } from './lookup/planning-office/planning-office.component';
+import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
       { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/casetype', component: CaseTypeComponent, canActivate: [AuthGuardService] },
-      { path: 'lookup/planningoffice', component: PlanningOfficeComponent, canActivate: [AuthGuardService] }
+      { path: 'lookup/planningoffice', component: PlanningOfficeComponent, canActivate: [AuthGuardService] },
+      { path: 'lookup/zonearea', component: ZoneAreaComponent, canActivate: [AuthGuardService] }
     ]
   },
   {

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppSettingApi, MenuDTO, MenuItemDTO } from 'src/app/services/apis/app-setting-api';
+import { AppMenuClient, MenuDTO, MenuItemDTO } from 'src/app/services/apis/app-setting-api';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 
 @Component({
@@ -27,7 +27,7 @@ export class LeftSideMenuComponent implements OnInit, OnDestroy {
   reloadMenuFlag: boolean;
   appSettingApiSub:any;
   
-  constructor(private appSettingApi: AppSettingApi) { }
+  constructor(private appMenuClient: AppMenuClient) { }
 
   ngOnInit() {
     this.loadMenu();
@@ -38,7 +38,7 @@ export class LeftSideMenuComponent implements OnInit, OnDestroy {
     }
   }
   public loadMenu(){
-    this.appSettingApiSub = this.appSettingApi.appMenu(1).subscribe(
+    this.appSettingApiSub = this.appMenuClient.appMenu(1).subscribe(
       x=>{
         this.menu = x.menu;
         this.menuItems = x.menu.menuItem;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppSettingApi } from '../services/apis/app-setting-api';
+import { AppMenuClient } from '../services/apis/app-setting-api';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,12 +8,12 @@ import { AppSettingApi } from '../services/apis/app-setting-api';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private appSettingApi: AppSettingApi) { }
+  constructor(private appMenuClient: AppMenuClient) { }
 
   ngOnInit() {
   }
   getToken($event){
-    this.appSettingApi.appMenu(1).subscribe(
+    this.appMenuClient.appMenu(1).subscribe(
       x=>{
         console.log(x);
       },

@@ -34,7 +34,9 @@ namespace DLMT.Web
             
             services.AddSingleton<ICaseTypeRepository, CaseTypeRepository>();
             services.AddScoped<ICaseTypeManager, CaseTypeManager>();
-            
+            services.AddSingleton<IPlanningOfficeRepository, PlanningOfficeRepository>();
+            services.AddScoped<IPlanningOfficeManager, PlanningOfficeManager>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

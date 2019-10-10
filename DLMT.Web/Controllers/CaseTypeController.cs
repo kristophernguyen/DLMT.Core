@@ -19,29 +19,26 @@ namespace DLMT.Web.Controllers
         {
             _caseTypeManager = caseTypeManager;
         }
-        [HttpPost]
+        [HttpPost("fetch/all")]
         [ProducesResponseType(typeof(CaseTypeGetAllResponse), 200)]
         [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
-        [Route("fetch/all")]
         public async Task<IActionResult> CaseTypeGetAllAsync(CaseTypeGetAllRequest req)
         {
             var result = await _caseTypeManager.GetAllAsync(req);
             return Ok(result);
         }
-        [HttpGet]
+        [HttpGet("fetch/{id}")]
         [ProducesResponseType(typeof(CaseTypeGetByIdResponse), 200)]
         [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
-        [Route("fetch/{id}")]
         public async Task<IActionResult> CaseTypeGetByIdAsync(int id)
         {
             var req = new CaseTypeGetByIdRequest { Id = id };
             var result = await _caseTypeManager.GetCaseTypeByIdAsync(req);
             return Ok(result);
         }
-        [HttpDelete]
+        [HttpDelete("delete/{id}")]
         [ProducesResponseType(typeof(CaseTypeDeleteByIdResponse), 200)]
         [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
-        [Route("delete/{id}")]
         public async Task<IActionResult> CaseTypeDeleteByIdAsync(int id)
         {
             var req = new CaseTypeDeleteByIdRequest
@@ -53,8 +50,7 @@ namespace DLMT.Web.Controllers
             return Ok(result);
         }
        
-        [HttpPost]
-        [Route("Update")]
+        [HttpPost("Update")]
         [ProducesResponseType(typeof(CaseTypeUpdateResponse), 200)]
         [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
         public async Task<IActionResult> CaseTypeUpdateAsync(CaseTypeUpdateRequest req)

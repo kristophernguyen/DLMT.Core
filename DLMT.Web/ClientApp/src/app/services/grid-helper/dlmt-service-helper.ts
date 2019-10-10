@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { DlmtApi, CaseTypeGetAllRequest, ViewPredicate, SortModel, SortCondition, FilterModel, FilterQuery, FilterCondition } from '../apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, CaseTypeGetAllRequest, ViewPredicate, SortModel, SortCondition, FilterModel, FilterQuery, FilterCondition } from '../apis/dlmt-api';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -7,7 +7,7 @@ import { State } from '@progress/kendo-data-query';
 @Injectable()
 export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
     public loading: boolean;
-    constructor(private dlmtApi: DlmtApi){
+    constructor(private caseTypeClient: CaseTypeClient){
         super(null);
     }
     getAllCaseType(state:State){
@@ -16,7 +16,7 @@ export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
         if (state){
             req.predicate = this.mapPredicate(state);
         }
-        this.dlmtApi.all(req)
+        this.caseTypeClient.all(req)
         .subscribe(x =>{
             this.loading = false;
             let result = (<GridDataResult>{

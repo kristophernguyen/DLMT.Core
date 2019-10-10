@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
-import { AppSettingApi, ViewSettingVM } from 'src/app/services/apis/app-setting-api';
+import { ViewSettingClient, ViewSettingVM } from 'src/app/services/apis/app-setting-api';
 import { IColumn } from 'src/app/model/kendo-column';
 import { DataStateChangeEvent, GridDataResult, GridComponent } from '@progress/kendo-angular-grid';
 import { State, SortDescriptor, FilterDescriptor} from '@progress/kendo-data-query';
 import { Observable } from 'rxjs/internal/Observable';
 import { DlmtApiHelperService } from 'src/app/services/grid-helper/dlmt-service-helper';
-import { DlmtApi, CaseTypeDTO } from 'src/app/services/apis/dlmt-api';
+import { CaseTypeClient, CaseTypeDTO } from 'src/app/services/apis/dlmt-api';
 
 @Component({
   selector: 'app-case-type-view',
@@ -28,8 +28,8 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   public state: State = {};
   deleteSub:any;
   constructor(
-    private appSettingApi: AppSettingApi,
-    private dlmtApi: DlmtApi,
+    private viewSettingClient: ViewSettingClient,
+    private caseTypeClient: CaseTypeClient,
     private dlmtService: DlmtApiHelperService) { }
   ngOnDestroy(): void {
     if (this.viewSettingSub && this.viewSettingSub.hasOwnProperty('unsubscribe')) {
@@ -52,7 +52,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
         text: 'PDF'
       }
     ];
-    this.viewSettingSub = this.appSettingApi.viewSetting(1).subscribe(
+    this.viewSettingSub = this.viewSettingClient.viewSetting(1).subscribe(
       x => {
         if (x && x.result) {
 
@@ -137,7 +137,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
     this.confirmDialog = false;
   }
   confirmDelete() {
-    this.deleteSub = this.dlmtApi.delete(this.currentRemoveDoc.id).subscribe(
+    this.deleteSub = this.caseTypeClient.delete(this.currentRemoveDoc.id).subscribe(
       x=>{
         if (!x.hasError){
           this.reloadView();

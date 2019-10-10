@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { CaseTypeDTO, DlmtApi, CaseTypeUpdateRequest } from 'src/app/services/apis/dlmt-api';
+import { CaseTypeDTO, CaseTypeClient, CaseTypeUpdateRequest } from 'src/app/services/apis/dlmt-api';
 
 @Component({
   selector: 'app-case-type-details',
@@ -25,7 +25,7 @@ export class CaseTypeDetailsComponent implements OnInit, OnDestroy {
   actionsLayout: string = 'normal';
   editDataFormGroup: FormGroup;
   updateSub:any;
-  constructor(private formBuilder: FormBuilder, private dlmtApi: DlmtApi) { }
+  constructor(private formBuilder: FormBuilder, private caseTypeClient: CaseTypeClient) { }
 
   ngOnInit() {
     this.initFormData();
@@ -70,7 +70,7 @@ export class CaseTypeDetailsComponent implements OnInit, OnDestroy {
       this.isLoading = true;
         let insertReq = new CaseTypeUpdateRequest();
         insertReq.caseType = this.generateRequest() as CaseTypeDTO;
-        this.updateSub = this.dlmtApi.update(insertReq).subscribe(
+        this.updateSub = this.caseTypeClient.update(insertReq).subscribe(
           x=>{
             this.isLoading = false;
             if (!x.hasError){

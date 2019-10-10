@@ -23,7 +23,7 @@ import { ErrorComponent } from './common/error/error.component';
 import { TokenInterceptor } from './services/common/token-interceptor';
 import { AppSettingApiUrl, DlmtApiUrl } from './common/config/app-config';
 import { environment } from 'src/environments/environment';
-import { AppSettingApi } from './services/apis/app-setting-api';
+import { AppMenuClient, AppSettingClient, ViewSettingClient } from './services/apis/app-setting-api';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { CaseTypeViewComponent } from './lookup/case-type/case-type-view/case-type-view.component';
@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { DlmtApi } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient } from './services/apis/dlmt-api';
 import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -82,8 +82,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
       useClass: TokenInterceptor,
       multi: true
     },
-    AppSettingApi,
-    DlmtApi,
+    CaseTypeClient, PlanningOfficeClient,
+    AppMenuClient, AppSettingClient, ViewSettingClient,
     DlmtApiHelperService,
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }

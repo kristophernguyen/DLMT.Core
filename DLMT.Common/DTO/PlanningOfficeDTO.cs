@@ -3,6 +3,6 @@
     public class PlanningOfficeDTO : BaseDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string OfficeName { get; set; }
     }
 }

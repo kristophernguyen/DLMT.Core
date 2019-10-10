@@ -4,8 +4,9 @@ import { IColumn } from 'src/app/model/kendo-column';
 import { DataStateChangeEvent, GridDataResult, GridComponent } from '@progress/kendo-angular-grid';
 import { State, SortDescriptor, FilterDescriptor} from '@progress/kendo-data-query';
 import { Observable } from 'rxjs/internal/Observable';
-import { DlmtApiHelperService } from 'src/app/services/grid-helper/dlmt-service-helper';
+import { CaseTypeApiHelperService } from 'src/app/services/grid-helper/casetype-service-helper';
 import { CaseTypeClient, CaseTypeDTO } from 'src/app/services/apis/dlmt-api';
+import { ViewConstants } from 'src/app/common/constants/viewconst';
 
 @Component({
   selector: 'app-case-type-view',
@@ -30,7 +31,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   constructor(
     private viewSettingClient: ViewSettingClient,
     private caseTypeClient: CaseTypeClient,
-    private dlmtService: DlmtApiHelperService) { }
+    private caseTypeService: CaseTypeApiHelperService) { }
   ngOnDestroy(): void {
     if (this.viewSettingSub && this.viewSettingSub.hasOwnProperty('unsubscribe')) {
       this.viewSettingSub.unsubscribe();
@@ -52,7 +53,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
         text: 'PDF'
       }
     ];
-    this.viewSettingSub = this.viewSettingClient.viewSetting(1).subscribe(
+    this.viewSettingSub = this.viewSettingClient.viewSetting(ViewConstants.CaseType).subscribe(
       x => {
         if (x && x.result) {
 
@@ -71,7 +72,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
             this.viewSetting = x.viewSetting;
           }
         }
-        this.viewData = this.dlmtService;
+        this.viewData = this.caseTypeService;
         this.isReady = true;
         let tempInitialSort: SortDescriptor[] = [{
           field: 'id',
@@ -82,7 +83,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
           take: this.viewSetting.pageSize,
           sort: tempInitialSort
         } as State;
-        this.dlmtService.getAllCaseType(this.state);
+        this.caseTypeService.getAllCaseType(this.state);
       },
       err => {
 
@@ -92,7 +93,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
   public dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.viewSetting.skip = state.skip;
-    this.dlmtService.getAllCaseType(state);
+    this.caseTypeService.getAllCaseType(state);
   }
   public searchView($event){
     this.state.filter = {
@@ -107,7 +108,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.dlmtService.getAllCaseType(this.state);
+    this.caseTypeService.getAllCaseType(this.state);
   }
   public editHandler({sender, rowIndex, dataItem}) {
     if (rowIndex >= 0){
@@ -131,7 +132,7 @@ export class CaseTypeViewComponent implements OnInit, OnDestroy {
     
   }
   reloadView(){
-    this.dlmtService.getAllCaseType(this.state);
+    this.caseTypeService.getAllCaseType(this.state);
   }
   closeConfirmDialog(){
     this.confirmDialog = false;

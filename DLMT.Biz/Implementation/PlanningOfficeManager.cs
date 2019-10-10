@@ -17,9 +17,10 @@ namespace DLMT.Biz.Implementation
             _repos = repos;
         }
 
-        public Task<PlanningOfficeDeleteByIdResponse> DeletePlanningOfficeByIdAsync(PlanningOfficeDeleteByIdRequest req)
+        public async Task<PlanningOfficeDeleteByIdResponse> DeletePlanningOfficeByIdAsync(PlanningOfficeDeleteByIdRequest req)
         {
-            throw new NotImplementedException();
+            req.UpdatedDate = DateTime.Today;
+            return await _repos.DeletePlanningOfficeByIdAsync(req);
         }
 
         public async Task<PlanningOfficeGetAllResponse> GetAllAsync(PlanningOfficeGetAllRequest req)
@@ -28,14 +29,34 @@ namespace DLMT.Biz.Implementation
             return result;
         }
 
-        public Task<PlanningOfficeGetByIdResponse> GetPlanningOfficeByIdAsync(PlanningOfficeGetByIdRequest req)
+        public async Task<PlanningOfficeGetByIdResponse> GetPlanningOfficeByIdAsync(PlanningOfficeGetByIdRequest req)
         {
-            throw new NotImplementedException();
+            var result = await _repos.GetPlanningOfficeByIdAsync(req);
+            return result;
         }
 
-        public Task<PlanningOfficeUpdateResponse> UpdatePlanningOfficeAsync(PlanningOfficeUpdateRequest req)
+        public async Task<PlanningOfficeUpdateResponse> UpdatePlanningOfficeAsync(PlanningOfficeUpdateRequest req)
         {
-            throw new NotImplementedException();
+            var result = new PlanningOfficeUpdateResponse();
+            var existingRecord = await _repos.GetPlanningOfficeByPlanningOfficeNameAsync(req.PlanningOffice.OfficeName);
+            if (existingRecord != null)
+            {
+                if (req.PlanningOffice.Id <= 0)
+                {
+                    result.HasError = true;
+                    result.ErrorMsgs.Add(new Common.DTO.ErrorDTO { ErrorMsg = "Duplicate Case Type Detected." });
+                    return result;
+                }
+                else if (req.PlanningOffice.Id > 0 && existingRecord != null && existingRecord.Id != req.PlanningOffice.Id)
+                {
+                    result.HasError = true;
+                    result.ErrorMsgs.Add(new Common.DTO.ErrorDTO { ErrorMsg = "Duplicate Case Type Detected." });
+                    return result;
+                }
+            }
+
+            req.PlanningOffice.UpdatedDate = DateTime.Today;
+            return await _repos.UpdatePlanningOfficeAsync(req);
         }
     }
 }

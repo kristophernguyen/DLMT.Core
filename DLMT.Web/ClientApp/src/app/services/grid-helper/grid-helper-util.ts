@@ -1,32 +1,7 @@
-import { Injectable } from "@angular/core";
-import { CaseTypeClient, PlanningOfficeClient, CaseTypeGetAllRequest, ViewPredicate, SortModel, SortCondition, FilterModel, FilterQuery, FilterCondition } from '../apis/dlmt-api';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { GridDataResult } from '@progress/kendo-angular-grid';
-import { State } from '@progress/kendo-data-query';
+import { ViewPredicate, SortModel, SortCondition, FilterModel, FilterQuery, FilterCondition } from '../apis/dlmt-api';
 
-@Injectable()
-export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
-    public loading: boolean;
-    constructor(private caseTypeClient: CaseTypeClient){
-        super(null);
-    }
-    getAllCaseType(state:State){
-        this.loading = true;
-        let req = new CaseTypeGetAllRequest();
-        if (state){
-            req.predicate = this.mapPredicate(state);
-        }
-        this.caseTypeClient.all(req)
-        .subscribe(x =>{
-            this.loading = false;
-            let result = (<GridDataResult>{
-                data: x.result,
-                total: x.total
-            });
-            return super.next(result);
-        });
-    }
-    public mapPredicate(state:any) : ViewPredicate{
+export class PredicateMapper {
+    public static MapTo(state:any):ViewPredicate{
         let predicate = new ViewPredicate();
         if (state){
             let tempStart = state.skip;
@@ -59,11 +34,10 @@ export class DlmtApiHelperService extends BehaviorSubject<GridDataResult>{
                         tempFilter.conditions.push(tempFilterCondition);
                         predicate.filter.filterQueries.push(tempFilter);
                     }
-                    
                 } 
             }
         }
         return predicate;
     }
-
+    
 }

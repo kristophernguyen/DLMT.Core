@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DLMT.Common.Request.PlanningOffice
+﻿namespace DLMT.Common.Request.PlanningOffice
 {
     public class PlanningOfficeGetByIdRequest : BaseRequest
     {
+        public int Id { get; set; }
     }
 }

@@ -92,8 +92,10 @@ export class CaseTypeDetailsComponent implements OnInit, OnDestroy {
   }
   generateRequest(): CaseTypeDTO{
     let tempDoc = this.doc;
-    tempDoc.description = this.editDataFormGroup.controls['description'].value;
-    tempDoc.caseType = this.editDataFormGroup.controls['caseType'].value;
+    let tempDesc = this.editDataFormGroup.controls['description'].value || '';
+    let tempCaseType = this.editDataFormGroup.controls['caseType'].value || '';
+    tempDoc.description = tempDesc.trim();
+    tempDoc.caseType = tempCaseType.trim();
     return tempDoc;
   }
   validateForm():boolean{
@@ -102,7 +104,8 @@ export class CaseTypeDetailsComponent implements OnInit, OnDestroy {
     result = this.editDataFormGroup.valid;
     if (!result){
       this.hasError = true;
-      if (this.editDataFormGroup.controls['caseType'].value.length > 4){
+      let tempCaseType = this.editDataFormGroup.controls['caseType'].value || ''
+      if (tempCaseType.trim().length > 4){
         this.alertText = 'Case type is limitted to 4 characters or less.';
       }
     }

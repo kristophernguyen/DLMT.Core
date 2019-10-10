@@ -1,1 +1,20 @@
-<p>planning-office-details works!</p>
+<kendo-dialog [(width)]="windowWidth" [(height)]="windowHeight" (close)="close()" title="{{title}}" *ngIf="isReady">
+        <div class="planningoffice-container">
+                <mat-progress-bar mode="indeterminate" [hidden]="!isLoading"></mat-progress-bar>
+                <div class="alert" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert" >
+                       {{alertText}}
+                </div>
+            <form [formGroup]="editDataFormGroup" novalidate>
+                <div class="form-group">
+                    <label for="planningoffice">Office Name</label>
+                    <input type="text" class="form-control" id="planningoffice" placeholder="Case Type" formControlName="officeName">
+                </div>
+            </form>
+        </div>
+    
+        <kendo-dialog-actions [layout]="actionsLayout">
+            <button type="submit" class="btn btn-sm btn-outline-danger" (click)="close()">Cancel</button>&nbsp;&nbsp;
+            <button type="submit" class="btn btn-sm btn-outline-primary" (click)="onSubmit()">Submit</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+    

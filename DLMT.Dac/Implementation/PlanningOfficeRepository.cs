@@ -22,10 +22,22 @@ namespace DLMT.Dac.Implementation
         {
             _connectionSettings = connectionSettings.Value;
         }
-        public Task<PlanningOfficeDeleteByIdResponse> DeletePlanningOfficeByIdAsync(PlanningOfficeDeleteByIdRequest req)
+        public async Task<PlanningOfficeDeleteByIdResponse> DeletePlanningOfficeByIdAsync(PlanningOfficeDeleteByIdRequest req)
         {
-
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
+            {
+                var result = new PlanningOfficeDeleteByIdResponse();
+                const string storeproc = @"[dbo].[uspPlanningOfficesDelete_New]";
+                await conn.OpenAsync();
+                var dynParm = new
+                {
+                    ID = req.Id,
+                    LastUpdatedBy = req.CurrentUser,
+                    LastModifiedDate = req.UpdatedDate
+                };
+                await conn.ExecuteAsync(storeproc, dynParm, null, null, CommandType.StoredProcedure);
+                return result;
+            }
         }
 
         public async Task<PlanningOfficeGetAllResponse> GetAllAsync(PlanningOfficeGetAllRequest req)
@@ -62,19 +74,58 @@ namespace DLMT.Dac.Implementation
             return resp;
         }
 
-        public Task<PlanningOfficeGetByIdResponse> GetPlanningOfficeByIdAsync(PlanningOfficeGetByIdRequest req)
+        public async Task<PlanningOfficeGetByIdResponse> GetPlanningOfficeByIdAsync(PlanningOfficeGetByIdRequest req)
         {
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
+            {
+                var result = new PlanningOfficeGetByIdResponse();
+                const string storeproc = @"[dbo].[uspPlanningOfficeGetById_New]";
+                await conn.OpenAsync();
+                var dynParm = new
+                {
+                    ID = req.Id
+                };
+                var rawResult = await conn.QueryAsync<PlanningOfficeDTO>(storeproc, dynParm, null, null, CommandType.StoredProcedure);
+                result.Data = rawResult.FirstOrDefault();
+                return result;
+            }
         }
 
-        public Task<PlanningOfficeDTO> GetPlanningOfficeByPlanningOfficeNameAsync(string PlanningOfficeName)
+        public async Task<PlanningOfficeDTO> GetPlanningOfficeByPlanningOfficeNameAsync(string planningOfficeName)
         {
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
+            {
+                var result = new PlanningOfficeDTO();
+                const string storeproc = @"[dbo].[uspPlanningOfficeGetByName_New]";
+                await conn.OpenAsync();
+                var dynParm = new
+                {
+                    OfficeName = planningOfficeName
+                };
+                var rawResult = await conn.QueryAsync<PlanningOfficeDTO>(storeproc, dynParm, null, null, CommandType.StoredProcedure);
+                result = rawResult.FirstOrDefault();
+                return result;
+            }
         }
 
-        public Task<PlanningOfficeUpdateResponse> UpdatePlanningOfficeAsync(PlanningOfficeUpdateRequest req)
+        public async Task<PlanningOfficeUpdateResponse> UpdatePlanningOfficeAsync(PlanningOfficeUpdateRequest req)
         {
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
+            {
+                var result = new PlanningOfficeUpdateResponse();
+                const string storeproc = @"[dbo].[uspPlanningOfficesUpdate_New]";
+                await conn.OpenAsync();
+                var dynParm = new
+                {
+                    req.PlanningOffice.Id,
+                    req.PlanningOffice.OfficeName,
+                    req.PlanningOffice.UpdatedBy,
+                    req.PlanningOffice.UpdatedDate
+                };
+                var rawResult = await conn.QueryAsync<PlanningOfficeDTO>(storeproc, dynParm, null, null, CommandType.StoredProcedure);
+                result.Data = rawResult.FirstOrDefault();
+                return result;
+            }
         }
     }
 }

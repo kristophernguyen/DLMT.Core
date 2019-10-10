@@ -14,6 +14,6 @@ namespace DLMT.Dac.Interface
         Task<PlanningOfficeDeleteByIdResponse> DeletePlanningOfficeByIdAsync(PlanningOfficeDeleteByIdRequest req);
         Task<PlanningOfficeGetByIdResponse> GetPlanningOfficeByIdAsync(PlanningOfficeGetByIdRequest req);
         Task<PlanningOfficeUpdateResponse> UpdatePlanningOfficeAsync(PlanningOfficeUpdateRequest req);
-        Task<PlanningOfficeDTO> GetPlanningOfficeByPlanningOfficeNameAsync(string PlanningOfficeName);
+        Task<PlanningOfficeDTO> GetPlanningOfficeByPlanningOfficeNameAsync(string planningOfficeName);
     }
 }

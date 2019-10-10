@@ -32,13 +32,14 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
 import { CaseTypeClient, PlanningOfficeClient } from './services/apis/dlmt-api';
-import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper';
+import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { PlanningOfficeComponent } from './lookup/planning-office/planning-office.component';
 import { PlanningOfficeViewComponent } from './lookup/planning-office/planning-office-view/planning-office-view.component';
 import { PlanningOfficeDetailsComponent } from './lookup/planning-office/planning-office-details/planning-office-details.component';
+import { PlanningOfficeApiHelperService } from './services/grid-helper/planningoffice-service-helper';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { PlanningOfficeDetailsComponent } from './lookup/planning-office/plannin
     },
     CaseTypeClient, PlanningOfficeClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
-    DlmtApiHelperService,
+    CaseTypeApiHelperService,
+    PlanningOfficeApiHelperService,
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],

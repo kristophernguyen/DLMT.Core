@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
+import {FormControl} from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PlanningOfficeViewComponent } from './planning-office-view/planning-office-view.component';
 
 @Component({
   selector: 'app-planning-office',
@@ -7,9 +11,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlanningOfficeComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild('planningOfficeViewComponent', {static: false}) planningOfficeViewComponent: PlanningOfficeViewComponent;
+
+  doc:any;
+  showEditDialog = false;
+  searchDataFormGroup: FormGroup;
+  
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.initForm();
+  }
+  initForm(){
+    this.searchDataFormGroup = this.formBuilder.group({
+      'searchInput': new FormControl()
+    });
+    this.searchDataFormGroup.controls['searchInput'].valueChanges
+    .pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    )
+    .subscribe(
+      x=>{
+        this.planningOfficeViewComponent.searchView(x);
+      }
+    )
+  }
+  gridActionClick($event){
+    this.showEditDialog = false;
+    this.doc = {};
+
+    if ($event && $event.action && $event.action.length > 0){
+      if ($event.data && $event.data.doc){
+        this.doc = $event.data.doc;
+      }
+      if ($event.action === 'edit'){
+        this.showEditDialog = true;
+      }
+    }
+  }
+  closeDialogClick($event){
+    this.showEditDialog = false;
+    if ($event && $event.data.reload){
+      this.planningOfficeViewComponent.reloadView();
+    }
   }
 
 }

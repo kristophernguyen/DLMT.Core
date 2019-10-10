@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -44,6 +44,10 @@ import { ZoneAreaApiHelperService } from './services/grid-helper/zonearea-servic
 import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
 import { ZoneAreaDetailsComponent } from './lookup/zone-area/zone-area-details/zone-area-details.component';
 import { ZoneAreaViewComponent } from './lookup/zone-area/zone-area-view/zone-area-view.component';
+import { AgencyComponent } from './lookup/agency/agency.component';
+import { AgencyDetailsComponent } from './lookup/agency/agency-details/agency-details.component';
+import { AgencyViewComponent } from './lookup/agency/agency-view/agency-view.component';
+import { AgencyApiHelperService } from './services/grid-helper/agency-service-helper';
 
 
 @NgModule({
@@ -70,6 +74,9 @@ import { ZoneAreaViewComponent } from './lookup/zone-area/zone-area-view/zone-ar
     ZoneAreaComponent,
     ZoneAreaDetailsComponent,
     ZoneAreaViewComponent,
+    AgencyComponent,
+    AgencyDetailsComponent,
+    AgencyViewComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -97,11 +104,12 @@ import { ZoneAreaViewComponent } from './lookup/zone-area/zone-area-view/zone-ar
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,
     ZoneAreaApiHelperService,
+    AgencyApiHelperService,
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],

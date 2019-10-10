@@ -34,10 +34,15 @@ namespace DLMT.Web
             
             services.AddSingleton<ICaseTypeRepository, CaseTypeRepository>();
             services.AddScoped<ICaseTypeManager, CaseTypeManager>();
+
             services.AddSingleton<IPlanningOfficeRepository, PlanningOfficeRepository>();
             services.AddScoped<IPlanningOfficeManager, PlanningOfficeManager>();
+
             services.AddSingleton<IZoneAreaRepository, ZoneAreaRepository>();
             services.AddScoped<IZoneAreaManager, ZoneAreaManager>();
+
+            services.AddSingleton<IAgencyRepository, AgencyRepository>();
+            services.AddScoped<IAgencyManager, AgencyManager>();
 
             services.AddAuthentication(options =>
             {

@@ -10,6 +10,7 @@ import { UnauthorizeComponent } from './authentication/unauthorize/unauthorize.c
 import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { PlanningOfficeComponent } from './lookup/planning-office/planning-office.component';
 import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
+import { AgencyComponent } from './lookup/agency/agency.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
       { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/casetype', component: CaseTypeComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/planningoffice', component: PlanningOfficeComponent, canActivate: [AuthGuardService] },
-      { path: 'lookup/zonearea', component: ZoneAreaComponent, canActivate: [AuthGuardService] }
+      { path: 'lookup/zonearea', component: ZoneAreaComponent, canActivate: [AuthGuardService] },
+      { path: 'lookup/agency', component: AgencyComponent, canActivate: [AuthGuardService] }
     ]
   },
   {

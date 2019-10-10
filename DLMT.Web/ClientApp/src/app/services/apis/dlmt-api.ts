@@ -9,11 +9,295 @@
 
 import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
 import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
-import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { DlmtApiUrl } from 'src/app/common/config/app-config';
 
 //export const DlmtApiUrl = new InjectionToken<string>('DlmtApiUrl');
+
+@Injectable()
+export class AgencyClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(DlmtApiUrl) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    all(body: AgencyGetAllRequest | undefined): Observable<AgencyGetAllResponse> {
+        let url_ = this.baseUrl + "/api/Agency/fetch/all";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAll(<any>response_);
+                } catch (e) {
+                    return <Observable<AgencyGetAllResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AgencyGetAllResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAll(response: HttpResponseBase): Observable<AgencyGetAllResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AgencyGetAllResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AgencyGetAllResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    fetch(id: number): Observable<AgencyGetByIdResponse> {
+        let url_ = this.baseUrl + "/api/Agency/fetch/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFetch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFetch(<any>response_);
+                } catch (e) {
+                    return <Observable<AgencyGetByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AgencyGetByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFetch(response: HttpResponseBase): Observable<AgencyGetByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AgencyGetByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AgencyGetByIdResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(id: number): Observable<AgencyDeleteByIdResponse> {
+        let url_ = this.baseUrl + "/api/Agency/delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<AgencyDeleteByIdResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AgencyDeleteByIdResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<AgencyDeleteByIdResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AgencyDeleteByIdResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AgencyDeleteByIdResponse>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    update(body: AgencyUpdateRequest | undefined): Observable<AgencyUpdateResponse> {
+        let url_ = this.baseUrl + "/api/Agency/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<AgencyUpdateResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AgencyUpdateResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<AgencyUpdateResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AgencyUpdateResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AgencyUpdateResponse>(<any>null);
+    }
+}
 
 @Injectable()
 export class CaseTypeClient {
@@ -1139,6 +1423,430 @@ export interface IViewPredicate {
     sort?: SortModel;
 }
 
+export class AgencyGetAllRequest implements IAgencyGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IAgencyGetAllRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.predicate = _data["predicate"] ? ViewPredicate.fromJS(_data["predicate"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyGetAllRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyGetAllRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predicate"] = this.predicate ? this.predicate.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class AgencyDTO implements IAgencyDTO {
+    id?: number;
+    name?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+
+    constructor(data?: IAgencyDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+            this.statusId = _data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): AgencyDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IAgencyDTO {
+    id?: number;
+    name?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+}
+
+export class ErrorDTO implements IErrorDTO {
+    errorCode?: string | undefined;
+    errorType?: string | undefined;
+    errorMsg?: string | undefined;
+
+    constructor(data?: IErrorDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.errorCode = _data["errorCode"];
+            this.errorType = _data["errorType"];
+            this.errorMsg = _data["errorMsg"];
+        }
+    }
+
+    static fromJS(data: any): ErrorDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ErrorDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["errorCode"] = this.errorCode;
+        data["errorType"] = this.errorType;
+        data["errorMsg"] = this.errorMsg;
+        return data; 
+    }
+}
+
+export interface IErrorDTO {
+    errorCode?: string | undefined;
+    errorType?: string | undefined;
+    errorMsg?: string | undefined;
+}
+
+export class AgencyGetAllResponse implements IAgencyGetAllResponse {
+    result?: AgencyDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IAgencyGetAllResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["result"])) {
+                this.result = [] as any;
+                for (let item of _data["result"])
+                    this.result!.push(AgencyDTO.fromJS(item));
+            }
+            this.total = _data["total"];
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyGetAllResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyGetAllResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.result)) {
+            data["result"] = [];
+            for (let item of this.result)
+                data["result"].push(item.toJSON());
+        }
+        data["total"] = this.total;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyGetAllResponse {
+    result?: AgencyDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class AgencyGetByIdResponse implements IAgencyGetByIdResponse {
+    data?: AgencyDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IAgencyGetByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? AgencyDTO.fromJS(_data["data"]) : <any>undefined;
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyGetByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyGetByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyGetByIdResponse {
+    data?: AgencyDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class AgencyDeleteByIdResponse implements IAgencyDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IAgencyDeleteByIdResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyDeleteByIdResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyDeleteByIdResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyDeleteByIdResponse {
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class AgencyUpdateRequest implements IAgencyUpdateRequest {
+    agency?: AgencyDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IAgencyUpdateRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.agency = _data["agency"] ? AgencyDTO.fromJS(_data["agency"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyUpdateRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyUpdateRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["agency"] = this.agency ? this.agency.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyUpdateRequest {
+    agency?: AgencyDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class AgencyUpdateResponse implements IAgencyUpdateResponse {
+    data?: AgencyDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IAgencyUpdateResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? AgencyDTO.fromJS(_data["data"]) : <any>undefined;
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AgencyUpdateResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AgencyUpdateResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IAgencyUpdateResponse {
+    data?: AgencyDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
 export class CaseTypeGetAllRequest implements ICaseTypeGetAllRequest {
     predicate?: ViewPredicate;
     currentUser?: string | undefined;
@@ -1253,50 +1961,6 @@ export interface ICaseTypeDTO {
     updatedDate?: Date;
     updatedBy?: string | undefined;
     statusId?: number;
-}
-
-export class ErrorDTO implements IErrorDTO {
-    errorCode?: string | undefined;
-    errorType?: string | undefined;
-    errorMsg?: string | undefined;
-
-    constructor(data?: IErrorDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.errorCode = _data["errorCode"];
-            this.errorType = _data["errorType"];
-            this.errorMsg = _data["errorMsg"];
-        }
-    }
-
-    static fromJS(data: any): ErrorDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new ErrorDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["errorCode"] = this.errorCode;
-        data["errorType"] = this.errorType;
-        data["errorMsg"] = this.errorMsg;
-        return data; 
-    }
-}
-
-export interface IErrorDTO {
-    errorCode?: string | undefined;
-    errorType?: string | undefined;
-    errorMsg?: string | undefined;
 }
 
 export class CaseTypeGetAllResponse implements ICaseTypeGetAllResponse {

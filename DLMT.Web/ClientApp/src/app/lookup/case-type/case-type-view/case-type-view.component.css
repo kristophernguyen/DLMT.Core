@@ -6,7 +6,7 @@
     margin-right:15px;
 }
 .grid-max-height{
-    height: calc(100vh - (7.5rem * 2));
+    height: calc(100vh - (8.5rem * 2));
 }
 .k-i-loading {
     position: absolute;

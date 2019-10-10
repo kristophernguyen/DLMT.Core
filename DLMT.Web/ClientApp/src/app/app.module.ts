@@ -36,6 +36,9 @@ import { DlmtApiHelperService } from './services/grid-helper/dlmt-service-helper
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { PlanningOfficeComponent } from './lookup/planning-office/planning-office.component';
+import { PlanningOfficeViewComponent } from './lookup/planning-office/planning-office-view/planning-office-view.component';
+import { PlanningOfficeDetailsComponent } from './lookup/planning-office/planning-office-details/planning-office-details.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +58,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     CaseTypeComponent,
     CaseTypeViewComponent,
     CaseTypeDetailsComponent,
+    PlanningOfficeComponent,
+    PlanningOfficeViewComponent,
+    PlanningOfficeDetailsComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -3,7 +3,6 @@
 <ul class="nav nav-sidebar">
   <li *ngFor="let m of menuItems; let i = index;"
     class="{{m.childMenuItems && m.childMenuItems.length > 0 ? 'sidebar-nav-item with-sub':'sidebar-nav-item'}}">
-    
     <a class="sidebar-nav-link" (click)="parentMenuClick($event, m)" [class.active]="m.isActiveDsp">
       <i class="{{m.icon}}"></i>
         {{m.name}}

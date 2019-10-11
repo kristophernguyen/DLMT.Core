@@ -9,7 +9,7 @@
 
 import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
 import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { DlmtApiUrl } from 'src/app/common/config/app-config';
 
@@ -580,6 +580,220 @@ export class CaseTypeClient {
             }));
         }
         return _observableOf<CaseTypeUpdateResponse>(<any>null);
+    }
+}
+
+@Injectable()
+export class DlmtCaseClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(DlmtApiUrl) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    all(body: DlmtCaseGetAllRequest | undefined): Observable<DlmtCaseGetAllResponse> {
+        let url_ = this.baseUrl + "/api/DlmtCase/fetch/all";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAll(<any>response_);
+                } catch (e) {
+                    return <Observable<DlmtCaseGetAllResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DlmtCaseGetAllResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAll(response: HttpResponseBase): Observable<DlmtCaseGetAllResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DlmtCaseGetAllResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DlmtCaseGetAllResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    summaryformlookup(): Observable<DlmtNewCaseFormLookupResponse> {
+        let url_ = this.baseUrl + "/api/DlmtCase/summaryformlookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSummaryformlookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSummaryformlookup(<any>response_);
+                } catch (e) {
+                    return <Observable<DlmtNewCaseFormLookupResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DlmtNewCaseFormLookupResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSummaryformlookup(response: HttpResponseBase): Observable<DlmtNewCaseFormLookupResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DlmtNewCaseFormLookupResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DlmtNewCaseFormLookupResponse>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    newcase(body: DlmtCaseSummaryRequest | undefined): Observable<DlmtCaseSummaryResponse> {
+        let url_ = this.baseUrl + "/api/DlmtCase/newcase";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processNewcase(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processNewcase(<any>response_);
+                } catch (e) {
+                    return <Observable<DlmtCaseSummaryResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DlmtCaseSummaryResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processNewcase(response: HttpResponseBase): Observable<DlmtCaseSummaryResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DlmtCaseSummaryResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DlmtCaseSummaryResponse>(<any>null);
     }
 }
 
@@ -2231,12 +2445,12 @@ export interface ICaseTypeUpdateResponse {
     errorMsgs?: ErrorDTO[] | undefined;
 }
 
-export class PlanningOfficeGetAllRequest implements IPlanningOfficeGetAllRequest {
+export class DlmtCaseGetAllRequest implements IDlmtCaseGetAllRequest {
     predicate?: ViewPredicate;
     currentUser?: string | undefined;
     roles?: string[] | undefined;
 
-    constructor(data?: IPlanningOfficeGetAllRequest) {
+    constructor(data?: IDlmtCaseGetAllRequest) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2257,9 +2471,9 @@ export class PlanningOfficeGetAllRequest implements IPlanningOfficeGetAllRequest
         }
     }
 
-    static fromJS(data: any): PlanningOfficeGetAllRequest {
+    static fromJS(data: any): DlmtCaseGetAllRequest {
         data = typeof data === 'object' ? data : {};
-        let result = new PlanningOfficeGetAllRequest();
+        let result = new DlmtCaseGetAllRequest();
         result.init(data);
         return result;
     }
@@ -2277,10 +2491,218 @@ export class PlanningOfficeGetAllRequest implements IPlanningOfficeGetAllRequest
     }
 }
 
-export interface IPlanningOfficeGetAllRequest {
+export interface IDlmtCaseGetAllRequest {
     predicate?: ViewPredicate;
     currentUser?: string | undefined;
     roles?: string[] | undefined;
+}
+
+export class CaseSearchDTO implements ICaseSearchDTO {
+    caseId?: number;
+    caseNumber?: string | undefined;
+    caseType?: string | undefined;
+    planningOffice?: string | undefined;
+    area?: string | undefined;
+    agency?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+
+    constructor(data?: ICaseSearchDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.caseId = _data["caseId"];
+            this.caseNumber = _data["caseNumber"];
+            this.caseType = _data["caseType"];
+            this.planningOffice = _data["planningOffice"];
+            this.area = _data["area"];
+            this.agency = _data["agency"];
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+            this.statusId = _data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): CaseSearchDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new CaseSearchDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["caseId"] = this.caseId;
+        data["caseNumber"] = this.caseNumber;
+        data["caseType"] = this.caseType;
+        data["planningOffice"] = this.planningOffice;
+        data["area"] = this.area;
+        data["agency"] = this.agency;
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface ICaseSearchDTO {
+    caseId?: number;
+    caseNumber?: string | undefined;
+    caseType?: string | undefined;
+    planningOffice?: string | undefined;
+    area?: string | undefined;
+    agency?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+}
+
+export class DlmtCaseGetAllResponse implements IDlmtCaseGetAllResponse {
+    result?: CaseSearchDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IDlmtCaseGetAllResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["result"])) {
+                this.result = [] as any;
+                for (let item of _data["result"])
+                    this.result!.push(CaseSearchDTO.fromJS(item));
+            }
+            this.total = _data["total"];
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DlmtCaseGetAllResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtCaseGetAllResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.result)) {
+            data["result"] = [];
+            for (let item of this.result)
+                data["result"].push(item.toJSON());
+        }
+        data["total"] = this.total;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDlmtCaseGetAllResponse {
+    result?: CaseSearchDTO[] | undefined;
+    total?: number;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class ZoneAreaDTO implements IZoneAreaDTO {
+    id?: number;
+    zone?: string | undefined;
+    name?: string | undefined;
+    zoneName?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+
+    constructor(data?: IZoneAreaDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.zone = _data["zone"];
+            this.name = _data["name"];
+            this.zoneName = _data["zoneName"];
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+            this.statusId = _data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): ZoneAreaDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ZoneAreaDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["zone"] = this.zone;
+        data["name"] = this.name;
+        data["zoneName"] = this.zoneName;
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IZoneAreaDTO {
+    id?: number;
+    zone?: string | undefined;
+    name?: string | undefined;
+    zoneName?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
 }
 
 export class PlanningOfficeDTO implements IPlanningOfficeDTO {
@@ -2341,6 +2763,310 @@ export interface IPlanningOfficeDTO {
     updatedDate?: Date;
     updatedBy?: string | undefined;
     statusId?: number;
+}
+
+export class DlmtNewCaseFormLookupResponse implements IDlmtNewCaseFormLookupResponse {
+    caseTypes?: CaseTypeDTO[] | undefined;
+    zoneAreas?: ZoneAreaDTO[] | undefined;
+    agencies?: AgencyDTO[] | undefined;
+    planningOffices?: PlanningOfficeDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IDlmtNewCaseFormLookupResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["caseTypes"])) {
+                this.caseTypes = [] as any;
+                for (let item of _data["caseTypes"])
+                    this.caseTypes!.push(CaseTypeDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["zoneAreas"])) {
+                this.zoneAreas = [] as any;
+                for (let item of _data["zoneAreas"])
+                    this.zoneAreas!.push(ZoneAreaDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["agencies"])) {
+                this.agencies = [] as any;
+                for (let item of _data["agencies"])
+                    this.agencies!.push(AgencyDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["planningOffices"])) {
+                this.planningOffices = [] as any;
+                for (let item of _data["planningOffices"])
+                    this.planningOffices!.push(PlanningOfficeDTO.fromJS(item));
+            }
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DlmtNewCaseFormLookupResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtNewCaseFormLookupResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.caseTypes)) {
+            data["caseTypes"] = [];
+            for (let item of this.caseTypes)
+                data["caseTypes"].push(item.toJSON());
+        }
+        if (Array.isArray(this.zoneAreas)) {
+            data["zoneAreas"] = [];
+            for (let item of this.zoneAreas)
+                data["zoneAreas"].push(item.toJSON());
+        }
+        if (Array.isArray(this.agencies)) {
+            data["agencies"] = [];
+            for (let item of this.agencies)
+                data["agencies"].push(item.toJSON());
+        }
+        if (Array.isArray(this.planningOffices)) {
+            data["planningOffices"] = [];
+            for (let item of this.planningOffices)
+                data["planningOffices"].push(item.toJSON());
+        }
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDlmtNewCaseFormLookupResponse {
+    caseTypes?: CaseTypeDTO[] | undefined;
+    zoneAreas?: ZoneAreaDTO[] | undefined;
+    agencies?: AgencyDTO[] | undefined;
+    planningOffices?: PlanningOfficeDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class DlmtCaseSummaryDTO implements IDlmtCaseSummaryDTO {
+    agencyId?: number;
+    caseNumber?: string | undefined;
+    zoneAreaId?: number;
+    planningOfficeId?: number;
+    caseTypeId?: number;
+
+    constructor(data?: IDlmtCaseSummaryDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.agencyId = _data["agencyId"];
+            this.caseNumber = _data["caseNumber"];
+            this.zoneAreaId = _data["zoneAreaId"];
+            this.planningOfficeId = _data["planningOfficeId"];
+            this.caseTypeId = _data["caseTypeId"];
+        }
+    }
+
+    static fromJS(data: any): DlmtCaseSummaryDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtCaseSummaryDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["agencyId"] = this.agencyId;
+        data["caseNumber"] = this.caseNumber;
+        data["zoneAreaId"] = this.zoneAreaId;
+        data["planningOfficeId"] = this.planningOfficeId;
+        data["caseTypeId"] = this.caseTypeId;
+        return data; 
+    }
+}
+
+export interface IDlmtCaseSummaryDTO {
+    agencyId?: number;
+    caseNumber?: string | undefined;
+    zoneAreaId?: number;
+    planningOfficeId?: number;
+    caseTypeId?: number;
+}
+
+export class DlmtCaseSummaryRequest implements IDlmtCaseSummaryRequest {
+    caseSummary?: DlmtCaseSummaryDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IDlmtCaseSummaryRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.caseSummary = _data["caseSummary"] ? DlmtCaseSummaryDTO.fromJS(_data["caseSummary"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): DlmtCaseSummaryRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtCaseSummaryRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["caseSummary"] = this.caseSummary ? this.caseSummary.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IDlmtCaseSummaryRequest {
+    caseSummary?: DlmtCaseSummaryDTO;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+}
+
+export class DlmtCaseSummaryResponse implements IDlmtCaseSummaryResponse {
+    caseSummary?: DlmtCaseSummaryDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IDlmtCaseSummaryResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.caseSummary = _data["caseSummary"] ? DlmtCaseSummaryDTO.fromJS(_data["caseSummary"]) : <any>undefined;
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DlmtCaseSummaryResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtCaseSummaryResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["caseSummary"] = this.caseSummary ? this.caseSummary.toJSON() : <any>undefined;
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDlmtCaseSummaryResponse {
+    caseSummary?: DlmtCaseSummaryDTO;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class PlanningOfficeGetAllRequest implements IPlanningOfficeGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
+
+    constructor(data?: IPlanningOfficeGetAllRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.predicate = _data["predicate"] ? ViewPredicate.fromJS(_data["predicate"]) : <any>undefined;
+            this.currentUser = _data["currentUser"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): PlanningOfficeGetAllRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new PlanningOfficeGetAllRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["predicate"] = this.predicate ? this.predicate.toJSON() : <any>undefined;
+        data["currentUser"] = this.currentUser;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IPlanningOfficeGetAllRequest {
+    predicate?: ViewPredicate;
+    currentUser?: string | undefined;
+    roles?: string[] | undefined;
 }
 
 export class PlanningOfficeGetAllResponse implements IPlanningOfficeGetAllResponse {
@@ -2661,74 +3387,6 @@ export interface IZoneAreaGetAllRequest {
     predicate?: ViewPredicate;
     currentUser?: string | undefined;
     roles?: string[] | undefined;
-}
-
-export class ZoneAreaDTO implements IZoneAreaDTO {
-    id?: number;
-    zone?: string | undefined;
-    name?: string | undefined;
-    zoneName?: string | undefined;
-    createdBy?: string | undefined;
-    createdDate?: Date;
-    updatedDate?: Date;
-    updatedBy?: string | undefined;
-    statusId?: number;
-
-    constructor(data?: IZoneAreaDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.zone = _data["zone"];
-            this.name = _data["name"];
-            this.zoneName = _data["zoneName"];
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
-            this.updatedBy = _data["updatedBy"];
-            this.statusId = _data["statusId"];
-        }
-    }
-
-    static fromJS(data: any): ZoneAreaDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new ZoneAreaDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["zone"] = this.zone;
-        data["name"] = this.name;
-        data["zoneName"] = this.zoneName;
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
-        data["updatedBy"] = this.updatedBy;
-        data["statusId"] = this.statusId;
-        return data; 
-    }
-}
-
-export interface IZoneAreaDTO {
-    id?: number;
-    zone?: string | undefined;
-    name?: string | undefined;
-    zoneName?: string | undefined;
-    createdBy?: string | undefined;
-    createdDate?: Date;
-    updatedDate?: Date;
-    updatedBy?: string | undefined;
-    statusId?: number;
 }
 
 export class ZoneAreaGetAllResponse implements IZoneAreaGetAllResponse {

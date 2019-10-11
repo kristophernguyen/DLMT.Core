@@ -44,6 +44,9 @@ namespace DLMT.Web
             services.AddSingleton<IAgencyRepository, AgencyRepository>();
             services.AddScoped<IAgencyManager, AgencyManager>();
 
+            services.AddSingleton<IDlmtCaseRepository, DlmtCaseRepository>();
+            services.AddScoped<IDlmtCasemanager, DlmtCasemanager>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

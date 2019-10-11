@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -48,7 +48,9 @@ import { AgencyComponent } from './lookup/agency/agency.component';
 import { AgencyDetailsComponent } from './lookup/agency/agency-details/agency-details.component';
 import { AgencyViewComponent } from './lookup/agency/agency-view/agency-view.component';
 import { AgencyApiHelperService } from './services/grid-helper/agency-service-helper';
-
+import { DlmtSearchApiHelperService } from './services/grid-helper/dlmtcase-service-helper';
+import { DlmtCaseNewComponent } from './dlmt-search/dlmt-case-new/dlmt-case-new.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,7 @@ import { AgencyApiHelperService } from './services/grid-helper/agency-service-he
     AgencyComponent,
     AgencyDetailsComponent,
     AgencyViewComponent,
+    DlmtCaseNewComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -93,7 +96,8 @@ import { AgencyApiHelperService } from './services/grid-helper/agency-service-he
     DropDownButtonModule,
     WindowModule,
     DialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgSelectModule
   ],
   providers: [
     AppSettingService,
@@ -104,12 +108,13 @@ import { AgencyApiHelperService } from './services/grid-helper/agency-service-he
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,
     ZoneAreaApiHelperService,
     AgencyApiHelperService,
+    DlmtSearchApiHelperService,
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],

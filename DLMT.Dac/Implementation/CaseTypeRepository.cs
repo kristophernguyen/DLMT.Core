@@ -106,7 +106,7 @@ namespace DLMT.Dac.Implementation
             }
             return resp;
         }
-
+        
         public async Task<CaseTypeDTO> GetCaseTypeByCaseTypeNameAsync(string caseTypeName)
         {
             using (var conn = new SqlConnection(_connectionSettings.DefaultConnection))
@@ -123,5 +123,7 @@ namespace DLMT.Dac.Implementation
                 return result;
             }
         }
+
+
     }
 }

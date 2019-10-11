@@ -1,0 +1,44 @@
+<kendo-dialog [(width)]="windowWidth" [(height)]="windowHeight" (close)="close()" title="{{title}}" *ngIf="isReady">
+    <div class="dlmtcase-container">
+        <mat-progress-bar mode="indeterminate" [hidden]="!isLoading"></mat-progress-bar>
+        <div class="alert" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert">
+            {{alertText}}
+        </div>
+        <form [formGroup]="editDataFormGroup" novalidate>
+            <div class="form-group">
+                <label for="caseType">Case Type</label>
+                <ng-select formControlName="caseType" [items]="caseTypeList" labelForId="caseType" bindValue="id"
+                    bindLabel="name" placeholder="Select a case type">
+                </ng-select>
+            </div>
+            <div class="form-group">
+                <label for="caseNumber">Case Number</label>
+                <input type="text" class="form-control" id="casenumber" placeholder="Case Number"
+                    formControlName="caseNumber">
+            </div>
+            <div class="form-group">
+                <label for="area">Area</label>
+                <ng-select formControlName="area" [items]="areaList" labelForId="area" bindValue="id" bindLabel="name"
+                    placeholder="Select an area">
+                </ng-select>
+            </div>
+            <div class="form-group">
+                <label for="agency">Agency</label>
+                <ng-select formControlName="agency" [items]="agencyList" [dropdownPosition]="'top'" labelForId="agency"
+                    bindValue="id" bindLabel="name" placeholder="Select an agency">
+                </ng-select>
+            </div>
+            <div class="form-group">
+                <label for="description">Planning Office</label>
+                <ng-select formControlName="planningOffice" [items]="planningOfficeList" [dropdownPosition]="'top'"
+                    labelForId="planningOffice" bindValue="id" bindLabel="name" placeholder="Select an office">
+                </ng-select>
+            </div>
+        </form>
+    </div>
+
+    <kendo-dialog-actions [layout]="actionsLayout">
+        <button type="submit" class="btn btn-sm btn-outline-danger" (click)="close()">Cancel</button>&nbsp;&nbsp;
+        <button type="submit" class="btn btn-sm btn-outline-primary" (click)="onSubmit()">Submit</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

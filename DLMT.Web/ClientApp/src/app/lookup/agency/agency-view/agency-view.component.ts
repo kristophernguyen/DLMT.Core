@@ -62,7 +62,9 @@ export class AgencyViewComponent implements OnInit, OnDestroy {
             let tempColumn = {} as IColumn
             tempColumn.field = tempServerColumn.propertyValueName;
             tempColumn.title = tempServerColumn.columnName;
-            tempColumn.width = tempServerColumn.columnWidth;
+            if (tempServerColumn.columnWidth){
+              tempColumn.width = tempServerColumn.columnWidth;
+            }
             tempColumn.type = tempServerColumn.columnType;
             tempColumn.format = tempServerColumn.columnFormat || '';
             tempColumn.isFilterable = tempServerColumn.isFilterable;

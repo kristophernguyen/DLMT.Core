@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient, DeveloperClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -123,7 +123,7 @@ import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient, DeveloperClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,

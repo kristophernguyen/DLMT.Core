@@ -584,6 +584,88 @@ export class CaseTypeClient {
 }
 
 @Injectable()
+export class DeveloperClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(DlmtApiUrl) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    developer(caseNumber: string, phaseNo: string): Observable<DeveloperByPhaseResponse> {
+        let url_ = this.baseUrl + "/api/Developer/fetch/developer/{caseNumber}/{phaseNo}";
+        if (caseNumber === undefined || caseNumber === null)
+            throw new Error("The parameter 'caseNumber' must be defined.");
+        url_ = url_.replace("{caseNumber}", encodeURIComponent("" + caseNumber)); 
+        if (phaseNo === undefined || phaseNo === null)
+            throw new Error("The parameter 'phaseNo' must be defined.");
+        url_ = url_.replace("{phaseNo}", encodeURIComponent("" + phaseNo)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeveloper(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeveloper(<any>response_);
+                } catch (e) {
+                    return <Observable<DeveloperByPhaseResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DeveloperByPhaseResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeveloper(response: HttpResponseBase): Observable<DeveloperByPhaseResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DeveloperByPhaseResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DeveloperByPhaseResponse>(<any>null);
+    }
+}
+
+@Injectable()
 export class DlmtCaseClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -925,6 +1007,76 @@ export class DlmtCaseClient {
             }));
         }
         return _observableOf<DlmtDetailsFormDataResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    personnel(caseNumber: string, phaseNo: string): Observable<DlmtDetailsPersonnelDataResponse> {
+        let url_ = this.baseUrl + "/api/DlmtCase/fetch/personnel/{caseNumber}/{phaseNo}";
+        if (caseNumber === undefined || caseNumber === null)
+            throw new Error("The parameter 'caseNumber' must be defined.");
+        url_ = url_.replace("{caseNumber}", encodeURIComponent("" + caseNumber)); 
+        if (phaseNo === undefined || phaseNo === null)
+            throw new Error("The parameter 'phaseNo' must be defined.");
+        url_ = url_.replace("{phaseNo}", encodeURIComponent("" + phaseNo)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPersonnel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPersonnel(<any>response_);
+                } catch (e) {
+                    return <Observable<DlmtDetailsPersonnelDataResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DlmtDetailsPersonnelDataResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processPersonnel(response: HttpResponseBase): Observable<DlmtDetailsPersonnelDataResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DlmtDetailsPersonnelDataResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        result400![key] = resultData400[key];
+                }
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DlmtDetailsPersonnelDataResponse>(<any>null);
     }
 }
 
@@ -2576,6 +2728,150 @@ export interface ICaseTypeUpdateResponse {
     errorMsgs?: ErrorDTO[] | undefined;
 }
 
+export class DeveloperDTO implements IDeveloperDTO {
+    id?: number;
+    name?: string | undefined;
+    contactName?: string | undefined;
+    address?: string | undefined;
+    city?: string | undefined;
+    state?: string | undefined;
+    zip?: string | undefined;
+    phone?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+
+    constructor(data?: IDeveloperDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.contactName = _data["contactName"];
+            this.address = _data["address"];
+            this.city = _data["city"];
+            this.state = _data["state"];
+            this.zip = _data["zip"];
+            this.phone = _data["phone"];
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.updatedDate = _data["updatedDate"] ? new Date(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+            this.statusId = _data["statusId"];
+        }
+    }
+
+    static fromJS(data: any): DeveloperDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeveloperDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["contactName"] = this.contactName;
+        data["address"] = this.address;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["zip"] = this.zip;
+        data["phone"] = this.phone;
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toISOString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        data["statusId"] = this.statusId;
+        return data; 
+    }
+}
+
+export interface IDeveloperDTO {
+    id?: number;
+    name?: string | undefined;
+    contactName?: string | undefined;
+    address?: string | undefined;
+    city?: string | undefined;
+    state?: string | undefined;
+    zip?: string | undefined;
+    phone?: string | undefined;
+    createdBy?: string | undefined;
+    createdDate?: Date;
+    updatedDate?: Date;
+    updatedBy?: string | undefined;
+    statusId?: number;
+}
+
+export class DeveloperByPhaseResponse implements IDeveloperByPhaseResponse {
+    data?: DeveloperDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IDeveloperByPhaseResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(DeveloperDTO.fromJS(item));
+            }
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DeveloperByPhaseResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeveloperByPhaseResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDeveloperByPhaseResponse {
+    data?: DeveloperDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
 export class DlmtCaseGetAllRequest implements IDlmtCaseGetAllRequest {
     predicate?: ViewPredicate;
     currentUser?: string | undefined;
@@ -3516,6 +3812,66 @@ export class DlmtDetailsFormDataResponse implements IDlmtDetailsFormDataResponse
 export interface IDlmtDetailsFormDataResponse {
     mainCase?: DlmtCaseDetailsDTO;
     casePhases?: CasePhaseDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+}
+
+export class DlmtDetailsPersonnelDataResponse implements IDlmtDetailsPersonnelDataResponse {
+    developers?: DeveloperDTO[] | undefined;
+    hasError?: boolean;
+    errorMsgs?: ErrorDTO[] | undefined;
+
+    constructor(data?: IDlmtDetailsPersonnelDataResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["developers"])) {
+                this.developers = [] as any;
+                for (let item of _data["developers"])
+                    this.developers!.push(DeveloperDTO.fromJS(item));
+            }
+            this.hasError = _data["hasError"];
+            if (Array.isArray(_data["errorMsgs"])) {
+                this.errorMsgs = [] as any;
+                for (let item of _data["errorMsgs"])
+                    this.errorMsgs!.push(ErrorDTO.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DlmtDetailsPersonnelDataResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DlmtDetailsPersonnelDataResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.developers)) {
+            data["developers"] = [];
+            for (let item of this.developers)
+                data["developers"].push(item.toJSON());
+        }
+        data["hasError"] = this.hasError;
+        if (Array.isArray(this.errorMsgs)) {
+            data["errorMsgs"] = [];
+            for (let item of this.errorMsgs)
+                data["errorMsgs"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDlmtDetailsPersonnelDataResponse {
+    developers?: DeveloperDTO[] | undefined;
     hasError?: boolean;
     errorMsgs?: ErrorDTO[] | undefined;
 }

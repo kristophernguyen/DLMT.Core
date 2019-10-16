@@ -62,6 +62,15 @@ namespace DLMT.Web.Controllers
             var result = await _dlmtCasemanager.GetCaseDetailFormDataAsync(req);
             return Ok(result);
         }
+        [HttpGet("fetch/personnel/{caseNumber}/{phaseNo}")]
+        [ProducesResponseType(typeof(DlmtDetailsPersonnelDataResponse), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        public async Task<IActionResult> DlmtDetailsPersonnelFormData(string caseNumber, string phaseNo)
+        {
+            var req = new DlmtDetailsPersonnelDataRequest {CaseNumber= caseNumber, PhaseNo = phaseNo };
+            var result = await _dlmtCasemanager.GetAllPersonnelFormData(req);
+            return Ok(result);
+        }
 
     }
 }

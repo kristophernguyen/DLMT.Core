@@ -12,5 +12,6 @@ namespace DLMT.Biz.Interface
         Task<DlmtNewCaseFormLookupResponse> GetNewCaseFormLookupAsync();
         Task<DlmtCaseSummaryUpdateResponse> UpdateDlmtCaseSummaryAsync(DlmtCaseSummaryUpdateRequest req);
         Task<DlmtDetailsFormDataResponse> GetCaseDetailFormDataAsync(DlmtDetailsFormDataRequest req);
+        Task<DlmtDetailsPersonnelDataResponse> GetAllPersonnelFormData(DlmtDetailsPersonnelDataRequest req);
     }
 }

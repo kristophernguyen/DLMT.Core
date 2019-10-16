@@ -22,6 +22,7 @@ namespace DLMT.Biz.Implementation
         private readonly IAgencyManager _agencyManager;
         private readonly IZoneAreaManager _zoneAreaManager;
         private readonly IPlanningOfficeManager _planningOfficeManager;
+        private readonly IDeveloperManager _developerManager;
         public DlmtCasemanager(
             IDlmtCaseRepository repos,
             ICaseTypeManager caseTypeManager,
@@ -196,6 +197,14 @@ namespace DLMT.Biz.Implementation
         public async Task<DlmtDetailsFormDataResponse> GetCaseDetailFormDataAsync(DlmtDetailsFormDataRequest req)
         {
             var result = await _repos.GetCaseDetailFormDataAsync(req);
+            return result;
+        }
+
+        public async Task<DlmtDetailsPersonnelDataResponse> GetAllPersonnelFormData(DlmtDetailsPersonnelDataRequest req)
+        {
+            var result = new DlmtDetailsPersonnelDataResponse();
+            var developerRaw = await _developerManager.GetAllDeveloperByPhaseAsync(new Common.Request.Developer.DeveloperByPhaseRequest { CaseNumber = req.CaseNumber, PhaseNo = req.PhaseNo });
+            result.Developers = developerRaw.Data;
             return result;
         }
     }

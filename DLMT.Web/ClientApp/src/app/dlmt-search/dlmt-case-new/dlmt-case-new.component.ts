@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { CaseTypeDTO, CaseTypeClient, CaseTypeUpdateRequest, PlanningOfficeDTO, PlanningOfficeClient, PlanningOfficeUpdateRequest, AgencyDTO, AgencyClient, AgencyUpdateRequest, CaseSearchDTO, DlmtCaseSummaryDTO, DlmtCaseClient, DlmtCaseSummaryRequest } from 'src/app/services/apis/dlmt-api';
+import { AgencyDTO, DlmtCaseSummaryDTO, DlmtCaseClient, DlmtCaseSummaryUpdateRequest } from 'src/app/services/apis/dlmt-api';
 
 
 
@@ -11,8 +11,6 @@ import { CaseTypeDTO, CaseTypeClient, CaseTypeUpdateRequest, PlanningOfficeDTO, 
 })
 export class DlmtCaseNewComponent implements OnInit, OnDestroy {
   
- 
-  @Input() doc:AgencyDTO;
   @Output() closeDialogClick = new EventEmitter();
 
   isReady = false;
@@ -53,8 +51,6 @@ export class DlmtCaseNewComponent implements OnInit, OnDestroy {
       'planningOffice': new FormControl('', [Validators.required])
     });
 
-    this.doc = new DlmtCaseSummaryDTO();
-    this.doc.id = 0;
     this.dlmtCaseClient.summaryformlookup().subscribe(
       x=>{
         
@@ -84,14 +80,13 @@ export class DlmtCaseNewComponent implements OnInit, OnDestroy {
         }
         this.isReady = true;
       },
-      err=>{
+      ()=>{
 
       }
     )
     
   }
   resetForm(){
-    this.doc = new DlmtCaseSummaryDTO();
     this.isReady = false;
   }
   onSubmit(){
@@ -99,21 +94,21 @@ export class DlmtCaseNewComponent implements OnInit, OnDestroy {
     this.alertText = this.alertTextOrg;
     if (this.validateForm()){
       this.isLoading = true;
-        let insertReq = new DlmtCaseSummaryRequest();
+        let insertReq = new DlmtCaseSummaryUpdateRequest();
         insertReq.caseSummary = this.generateRequest() as DlmtCaseSummaryDTO;
-        this.updateSub = this.dlmtCaseClient.newcase(insertReq).subscribe(
+        this.updateSub = this.dlmtCaseClient.casesummaryupdate(insertReq).subscribe(
           x=>{
             this.isLoading = false;
             if (!x.hasError){
               this.reloadFlag = true;
-              this.close();
+              this.close(x.data);
             }
             else{
               this.alertText = x.errorMsgs && x.errorMsgs.length > 0 ? x.errorMsgs[0].errorMsg : "Unexpected exception: contact admin for details";
               this.hasError = x.hasError;
             }
           },
-          err=>{
+          ()=>{
             this.isLoading = false;
             this.hasError = true;
             this.alertText = "Unexpected exception: contact admin for details";
@@ -122,9 +117,18 @@ export class DlmtCaseNewComponent implements OnInit, OnDestroy {
     }
   }
   generateRequest(): DlmtCaseSummaryDTO{
-    let tempDoc = this.doc;
-    let tempVal = this.editDataFormGroup.controls['name'].value || '';
-    tempDoc.name =  tempVal.trim();
+    let tempDoc = new DlmtCaseSummaryDTO();
+    let tempCaseNumberVal = this.editDataFormGroup.controls['caseNumber'].value || '';
+    let tempCaseTypeIdVal = this.editDataFormGroup.controls['caseType'].value || 0;
+    let tempAgencyIdVal = this.editDataFormGroup.controls['agency'].value || 0;
+    let tempAreaIdVal = this.editDataFormGroup.controls['area'].value || 0;
+    let tempPlanningOfficeIdVal = this.editDataFormGroup.controls['planningOffice'].value || 0;
+    tempDoc.id = 0;
+    tempDoc.caseNumber = tempCaseNumberVal;
+    tempDoc.caseTypeId = tempCaseTypeIdVal;
+    tempDoc.agencyId = tempAgencyIdVal;
+    tempDoc.zoneAreaId = tempAreaIdVal;
+    tempDoc.planningOfficeId = tempPlanningOfficeIdVal;
     return tempDoc;
   }
   validateForm():boolean{
@@ -140,12 +144,8 @@ export class DlmtCaseNewComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-  close(){
+  close(doc: DlmtCaseSummaryDTO){
     this.resetForm();
-    this.closeDialogClick.emit({action: 'closeDialog', data: {reload: this.reloadFlag}})
+    this.closeDialogClick.emit({action: 'closeNewDialog', data: {reload: this.reloadFlag, doc: doc}});
   }
-  agencySearch(eventName, $event){
-    console.log($event);
-  }
-
 }

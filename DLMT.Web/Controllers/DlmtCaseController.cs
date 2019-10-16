@@ -2,6 +2,7 @@
 using DLMT.Common.Request.DlmtCase;
 using DLMT.Common.Response;
 using DLMT.Common.Response.DlmtCase;
+using DLMT.Web.Extensions.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -35,13 +36,32 @@ namespace DLMT.Web.Controllers
             var result = await _dlmtCasemanager.GetNewCaseFormLookupAsync();
             return Ok(result);
         }
-        [HttpPost("newcase")]
-        [ProducesResponseType(typeof(DlmtCaseSummaryResponse), 200)]
+        [HttpPost("casesummaryupdate")]
+        [ProducesResponseType(typeof(DlmtCaseSummaryUpdateResponse), 200)]
         [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
-        public async Task<IActionResult> DlmtCaseSummaryInsertAsync(DlmtCaseSummaryRequest req)
+        public async Task<IActionResult> DlmtCaseSummaryUpdateAsync(DlmtCaseSummaryUpdateRequest req)
         {
-            var result = await Task.FromResult("hello");
+            req.CaseSummary.UpdatedBy = User.CurrentUserName();
+            var result = await _dlmtCasemanager.UpdateDlmtCaseSummaryAsync(req);
             return Ok(result);
         }
+        [HttpGet("detailsformlookup")]
+        [ProducesResponseType(typeof(DetailsFormLookupResponse), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        public async Task<IActionResult> DlmtCaseDetailsFormLookup()
+        {
+            var result = await _dlmtCasemanager.GetCaseDetailsFormLookupAsync();
+            return Ok(result);
+        }
+        [HttpGet("detailsformdata/{id}")]
+        [ProducesResponseType(typeof(DlmtDetailsFormDataResponse), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        public async Task<IActionResult> DlmtDetailsFormData(int id)
+        {
+            var req = new DlmtDetailsFormDataRequest { Id = id };
+            var result = await _dlmtCasemanager.GetCaseDetailFormDataAsync(req);
+            return Ok(result);
+        }
+
     }
 }

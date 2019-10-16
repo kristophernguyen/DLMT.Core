@@ -1,0 +1,18 @@
+.alert-container {
+    margin: 10px;
+}
+
+.developer-container {
+    margin: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-body-ext {
+    height: calc(100vh - (6.3rem * 2));
+}
+
+.tab-content {
+    height: 100%;
+}

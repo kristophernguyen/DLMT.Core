@@ -114,7 +114,9 @@ export class DlmtSearchViewComponent implements OnInit, OnDestroy {
   }
   public editHandler({rowIndex, dataItem}) {
     if (rowIndex >= 0){
-      this.actionClick.emit({action: 'edit', data: {doc: dataItem}});
+      let tempDoc = dataItem;
+      tempDoc['id'] = dataItem.caseId;
+      this.actionClick.emit({action: 'edit', data: {doc: tempDoc}});
     }
   }
   public deleteHandler({ dataItem }) {
@@ -150,7 +152,7 @@ export class DlmtSearchViewComponent implements OnInit, OnDestroy {
     // );
   }
   newDocClick(){
-    this.actionClick.emit({action: 'edit', data: {id: 0}});
+    this.actionClick.emit({action: 'new', data: {id: 0}});
   }
 
 }

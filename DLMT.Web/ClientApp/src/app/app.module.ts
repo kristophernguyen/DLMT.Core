@@ -51,6 +51,14 @@ import { AgencyApiHelperService } from './services/grid-helper/agency-service-he
 import { DlmtSearchApiHelperService } from './services/grid-helper/dlmtcase-service-helper';
 import { DlmtCaseNewComponent } from './dlmt-search/dlmt-case-new/dlmt-case-new.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DlmtDetailsCasephaseComponent } from './dlmt-search/dlmt-search-details/dlmt-details-casephase/dlmt-details-casephase.component';
+import { DlmtDetailsDocumentsComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/dlmt-details-documents.component';
+import { DlmtDetailsDeveloperComponent } from './dlmt-search/dlmt-search-details/dlmt-details-developer/dlmt-details-developer.component';
+import { DlmtDetailsAssociatedcasesComponent } from './dlmt-search/dlmt-search-details/dlmt-details-associatedcases/dlmt-details-associatedcases.component';
+import { DlmtCaseDetailsService } from './services/case-details/case-details-service-helper';
+import { DlmtDetailsOverviewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-overview/dlmt-details-overview.component';
+import { DisableControlDirective } from './common/directives/disable-control';
+import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -80,6 +88,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AgencyDetailsComponent,
     AgencyViewComponent,
     DlmtCaseNewComponent,
+    DlmtDetailsCasephaseComponent,
+    DlmtDetailsDocumentsComponent,
+    DlmtDetailsDeveloperComponent,
+    DlmtDetailsAssociatedcasesComponent,
+    DlmtDetailsOverviewComponent,
+    DisableControlDirective
   ],
   imports: [
     BrowserAnimationsModule,
@@ -97,7 +111,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     WindowModule,
     DialogModule,
     MatProgressBarModule,
-    NgSelectModule
+    NgSelectModule,
+    NgbTabsetModule
   ],
   providers: [
     AppSettingService,
@@ -115,6 +130,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ZoneAreaApiHelperService,
     AgencyApiHelperService,
     DlmtSearchApiHelperService,
+    DlmtCaseDetailsService,
+
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },
     { provide: DlmtApiUrl, useValue:environment.api_url.dlmt }
   ],

@@ -1,0 +1,142 @@
+.modal_container {
+    background-color: #ffffff;
+    /* box-shadow: 0px 0px 2px 2px rgba(69, 65, 78, 0.2); */
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 25px;
+    z-index: 1001;
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.action_container {
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    box-shadow: 0px 0px 2px 2px rgba(69, 65, 78, 0.2);
+}
+
+.details-container {
+    overflow-y: auto;
+    height: 400px;
+}
+
+.iaarow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.iaacolumn_right {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 25%;
+    height: calc(100vh - 100px);
+}
+
+.iaacolumn_left {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 75%;
+    height: calc(100vh - 100px);
+    padding-right: 10px;
+}
+
+.profile-row {
+    flex-grow: 1;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%
+}
+
+.profile-container {
+    display: flex;
+    height: calc(100vh - 120px);
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.second-row {
+    flex-grow: 1;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.full-height-vh {
+    min-height: calc(100vh - 235px);
+}
+
+.profile-left-column {
+    border: 1px solid #ced4da;
+    left: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #fff;
+}
+
+.profile-left-menu {
+    padding-top: 25px;
+}
+
+.card-contact {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    padding-bottom: 0px;
+    border-bottom: 0px;
+}
+
+.right-side-container {
+    height: 100%;
+}
+
+
+/* Nav */
+
+.show_nav {
+    display: block;
+}
+
+.nav-sub-text {
+    font-size: 11px;
+}
+
+.sidebar-nav-link.active {
+    color: #fff !important;
+}
+
+.currentPhase-dropdown-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0 20px;
+    color: #212529;
+    font-weight: 500;
+    display: block;
+}
+
+.currentPhase-dropdown {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0 20px;
+    margin-bottom: 15px;
+    color: #212529;
+    font-weight: 500;
+    display: block;
+}

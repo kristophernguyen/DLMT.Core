@@ -1,0 +1,95 @@
+<div class="message-header">
+    <a href="" class="message-back"><i class="fa fa-angle-left"></i></a>
+    <div class="media">
+        <i class="icon ion-ios-information top-section-header-icon"></i>
+        <div class="media-body">
+            <h6>General Info</h6>
+        </div>
+        <!-- media-body -->
+    </div>
+    <!-- media -->
+    <div class="message-option">&nbsp;
+    </div>
+</div>
+<!-- message-header -->
+<div class="message-body ps ps--theme_default message-body-ext">
+
+    <div class="main-component-container border_less">
+        <div class="alert alert-container" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert">
+            {{alertText}}
+        </div>
+        <div id="case-locationinfo" class="full-table-outter">
+            <div class="table-header-info">
+                <table class="table-header-container">
+                    <tr>
+                        <td class="table-header-info-icon-column"><i class="icon ion-flag icon-table-header-info"></i>
+                        </td>
+                        <td>Case Location Info</td>
+                        <td align="right" class="table-header-right-button">
+                            <button class="btn btn-sm btn-outline-primary" (click)="updateLocation($event)" [hidden]="!disableLocationUpdate"><i
+                                            class="fa fa-pencil-square-o mg-r-5"></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-primary" (click)="saveLocation($event)" [hidden]="disableLocationUpdate"><i
+                                                class="fa fa-save mg-r-5"></i> Save</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="container-section-inner">
+                <form [formGroup]="editLocationInfoFormGroup" novalidate>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="area">Area</label>
+                                <ng-select formControlName="area" [disableControl]="disableLocationUpdate" [clearable]="false" [items]="areaList" labelForId="area" bindValue="id" bindLabel="name" placeholder="Select an area">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="agency">Agency</label>
+                                <ng-select formControlName="agency" [disableControl]="disableLocationUpdate" [clearable]="false" [items]="agencyList" labelForId="agency" bindValue="id" bindLabel="name" placeholder="Select an agency">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="description">Planning Office</label>
+                                <ng-select formControlName="planningOffice" [disableControl]="disableLocationUpdate" [clearable]="false" [items]="planningOfficeList" [dropdownPosition]="'top'" labelForId="planningOffice" bindValue="id" bindLabel="officeName" placeholder="Select an office">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="box box-grid">
+            <div class="grid-section-fullheight">
+                <kendo-grid [data]="gridView" [pageSize]="pageSize" [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [resizable]="true" class="grid-full-height">
+                    <ng-template kendoGridToolbarTemplate [position]="toolbarPosition">
+                        <div style="float:right;">
+                            <button class="btn btn-sm btn-outline-primary" (click)="newDocClick()"><i
+                                    class="fa fa-pencil-square-o mg-r-5"></i> New Phase</button>
+                        </div>
+                    </ng-template>
+                    <kendo-grid-column field="phaseNo" [width]="100" [minResizableWidth]="100" title="Phase No.">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="lots" title="Lots">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="spaces" title="Spaces" [width]="180">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="grossAcres" title="Gross Acres">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="netAcres" title="Net Acres">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="encrPermitNumber" title="Permit Number">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="encrPermitExpected" title="Permit">
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- message-body -->

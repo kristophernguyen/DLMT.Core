@@ -4,8 +4,9 @@ using System.Text;
 
 namespace DLMT.Common.DTO
 {
-    public class DlmtCaseSummaryDTO
+    public class DlmtCaseSummaryDTO : BaseDTO
     {
+        public int Id { get; set; }
         public int AgencyId { get; set; }
         public string CaseNumber { get; set; }
         public int ZoneAreaId { get; set; }

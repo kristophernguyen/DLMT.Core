@@ -1,15 +1,66 @@
-<div class="dialog-overlay" style="display: block;">
-    <div class="editor dialog">
-        <h3>Case Details | 123</h3><button class="button-close"><span>X</span></button>
-        <div class="editor-container"></div>
-        <div class="edit-area clearfix">
-            <div class="col-xs-6 col-md-6 col-lg-6">
-                <div class="pane pane-ts">
-
-                </div>
+<div class="modal_container">
+    <div id="action_container" class="action_container pd-15" *ngIf="isReady">
+        <div>
+            <div class="clearfix">
+                <span class="float-left">
+          <h3 class="pull-left" title="test">Case Details</h3>
+        </span>
+                <span class="float-right"><i class="fa fa-times" (click)="closeWindow($event)"></i></span>
             </div>
-            <div class="col-xs-6 col-md-6 col-lg-6">
-                <div class="pane-preview" ></div>
+            <mat-progress-bar mode="indeterminate" [hidden]="!inProgress"></mat-progress-bar>
+        </div>
+        <div class="profile-container">
+            <div class="container-messages with-sidebar">
+                <div class="messages-left">
+                    <div class="profile-left-column ps ps--theme_default full-height">
+                        <div class="card-contact">
+                            <div class="tx-center">
+                                <a><img src="assets/img/map-marker-2.jpg" class="card-img profile-image" alt=""></a>
+                                <h5 class="mg-t-10 mg-b-5"><a href="" class="contact-name">{{docDetailsData.mainCase.caseTypeDsp}}&nbsp;|&nbsp;{{docDetailsData.mainCase.caseNumber}}</a></h5>
+                                <p class="nav-sub-text">
+                                    Created By: {{ (docDetailsData.mainCase.createdBy.length > 20) ? (docDetailsData.mainCase.createdBy | slice:0:20)+'...':(docDetailsData.mainCase.createdBy) }}<br> Updated By: {{ (docDetailsData.mainCase.updatedBy.length
+                                    > 20) ? (docDetailsData.mainCase.updatedBy | slice:0:20)+'...':(docDetailsData.mainCase.updatedBy) }}<br> Last Update: {{docDetailsData.mainCase.updatedDate | date: 'MM/dd/yyyy'}}
+
+                                </p>
+                            </div>
+                            <!-- tx-center -->
+                        </div>
+                        <div class="profile-left-menu">
+                            <div *ngIf="docMenuIsReady">
+
+
+                                <div class="currentPhase-dropdown">
+                                    <label>Current Selected Phase</label>
+                                    <ng-select [items]="casePhases" (change)="onPhaseChange($event)" [clearable]="false" bindLabel="phaseNo" bindValue="id" [(ngModel)]="selectedPhase" placeholder="Select a phase">
+                                    </ng-select>
+                                </div>
+
+
+
+
+                                <ul class="nav nav-sidebar">
+                                    <li *ngFor="let m of docMenu.menuItem; let i = index;" class="{{m.childMenuItems && m.childMenuItems.length > 0 ? 'sidebar-nav-item with-sub':'sidebar-nav-item'}}">
+                                        <a class="sidebar-nav-link" (click)="parentMenuClick($event, m)" [class.active]="m.isActiveDsp">
+                                            <i class="{{m.icon}}"></i> {{m.name}}
+                                        </a>
+                                        <ul class="nav sidebar-nav-sub show_nav" *ngIf="m.showChildDsp" [@slideInOut]>
+                                            <li *ngFor="let c of m.childMenuItems; let j = index;" class="nav-sub-item">
+                                                <a class="nav-sub-link" (click)="childMenuClick($event, c)" [class.active]="c.isActiveDsp">{{c.name}}</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- messages-list -->
+                </div>
+                <!-- messages-left -->
+                <div class="messages-right">
+                    <app-dlmt-details-overview *ngIf="stepId === 1" class="right-side-container"></app-dlmt-details-overview>
+                    <app-dlmt-details-developer *ngIf="stepId === 2" class="right-side-container"></app-dlmt-details-developer>
+                </div>
+                <!-- messages-right -->
             </div>
         </div>
     </div>

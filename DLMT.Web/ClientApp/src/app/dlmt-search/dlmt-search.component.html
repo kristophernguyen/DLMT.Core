@@ -32,4 +32,5 @@
         </div>
     </div>
 </div><!-- container -->
-<app-dlmt-case-new [doc]="doc" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)"></app-dlmt-case-new>
+<app-dlmt-case-new *ngIf="showNewDialog" (closeDialogClick)="closeNewDialogClick($event)"></app-dlmt-case-new>
+<app-dlmt-search-details *ngIf="showEditDialog" [docId]="mainDocId" (closeDialogClick)="closeEditDialogClick($event)"></app-dlmt-search-details>

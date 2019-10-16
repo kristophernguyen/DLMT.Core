@@ -1,9 +1,6 @@
 ﻿using DLMT.Common.DTO;
 using DLMT.Common.Request.DlmtCase;
 using DLMT.Common.Response.DlmtCase;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DLMT.Dac.Interface
@@ -14,6 +11,8 @@ namespace DLMT.Dac.Interface
         Task<DlmtCaseDeleteByIdResponse> DeleteDlmtCaseByIdAsync(DlmtCaseDeleteByIdRequest req);
         Task<DlmtCaseGetByIdResponse> GetDlmtCaseByIdAsync(DlmtCaseGetByIdRequest req);
         Task<DlmtCaseUpdateResponse> UpdateDlmtCaseAsync(DlmtCaseUpdateRequest req);
-        Task<CaseSearchDTO> GetDlmtCaseByDlmtCaseNameAsync(string DlmtCaseName);
+        Task<DlmtCaseSummaryUpdateResponse> UpdateDlmtCaseSummaryAsync(DlmtCaseSummaryUpdateRequest req);
+        Task<CaseSearchDTO> GetCaseSummaryByCaseNumberAsync(string caseNumber);
+        Task<DlmtDetailsFormDataResponse> GetCaseDetailFormDataAsync(DlmtDetailsFormDataRequest req);
     }
 }

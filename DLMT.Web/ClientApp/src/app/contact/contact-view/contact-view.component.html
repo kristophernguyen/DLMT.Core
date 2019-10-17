@@ -5,7 +5,7 @@
     <ng-template kendoGridToolbarTemplate [position]="toolbarPosition">
         <div style="float:right;">
             <button class="btn btn-sm btn-outline-secondary" (click)="exportView($event)"><i class="fa fa-file-excel-o mg-r-5"></i> Export to Excel</button>&nbsp;&nbsp;
-            <button class="btn btn-sm btn-outline-primary" (click)="newDocClick()"><i class="fa fa-pencil-square-o mg-r-5"></i> New Office</button>
+            <button class="btn btn-sm btn-outline-primary" (click)="newDocClick()"><i class="fa fa-pencil-square-o mg-r-5"></i> New Contact</button>
         </div>
     </ng-template>
     <kendo-grid-column *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}" width="{{column.width}}" format="{{column.format}}" filter="{{column.type}}"></kendo-grid-column>
@@ -22,7 +22,7 @@
         <kendo-pager-next-buttons></kendo-pager-next-buttons>
         <kendo-pager-info></kendo-pager-info>
     </ng-template>
-    <kendo-grid-excel fileName="PlanningOffice.xlsx"></kendo-grid-excel>
+    <kendo-grid-excel fileName="agency.xlsx"></kendo-grid-excel>
 </kendo-grid>
 <kendo-dialog title="Please confirm" *ngIf="confirmDialog" (close)="closeConfirmDialog()" [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center;">Are you sure you want to delete this record?</p>

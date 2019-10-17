@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ZoneAreaClient, ZoneAreaGetAllRequest, DlmtCaseClient, DlmtCaseGetAllRequest } from '../apis/dlmt-api';
+import { DlmtCaseClient, DlmtCaseGetAllRequest } from '../apis/dlmt-api';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';

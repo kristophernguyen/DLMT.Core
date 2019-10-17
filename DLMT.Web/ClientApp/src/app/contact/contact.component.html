@@ -2,9 +2,9 @@
     <div class="slim-pageheader">
         <ol class="breadcrumb slim-breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Case Type</li>
+            <li class="breadcrumb-item active" aria-current="page">Contact</li>
         </ol>
-        <h6 class="slim-pagetitle">Case Type</h6>
+        <h6 class="slim-pagetitle">Contact | {{selectedSearchType.text}}</h6>
     </div>
     <!-- slim-pageheader -->
     <div class="main-component-container">
@@ -16,7 +16,9 @@
                     </div>
                     <div class="search-all search-all-new-nav col-6">
                         <div class="search-input-container">
-                            <input id="local-search" class="full-width" placeholder="Search Case Type ..." name="s" formControlName="searchInput" />
+                            <kendo-dropdownlist [data]="searchTypes" (selectionChange)="searchTypeSelectionChange($event)" formControlName="searchType" [textField]="'text'" [valueField]="'value'" [valuePrimitive]="true">
+                            </kendo-dropdownlist>
+                            <input id="local-search" placeholder="Search contact ..." name="s" formControlName="searchInput" />
                         </div>
                     </div>
                     <div class="col-3">
@@ -26,11 +28,11 @@
             </div>
         </form>
         <div class="box box-grid">
-            <app-case-type-view class="grid-full-height" (actionClick)="gridActionClick($event)" #caseTypeViewComponent>
-            </app-case-type-view>
+            <app-contact-view class="grid-full-height" (actionClick)="gridActionClick($event)" [contactType]="selectedSearchType.propertyName" #contactViewComponent>
+            </app-contact-view>
         </div>
     </div>
 </div>
 <!-- container -->
-<app-case-type-details [doc]="doc" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)">
-</app-case-type-details>
+<app-agency-details [doc]="doc" *ngIf="showEditDialog" (closeDialogClick)="closeDialogClick($event)">
+</app-agency-details>

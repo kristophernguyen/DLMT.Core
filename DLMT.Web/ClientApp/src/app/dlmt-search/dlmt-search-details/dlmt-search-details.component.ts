@@ -63,7 +63,7 @@ export class DlmtSearchDetailsComponent implements OnInit, OnDestroy {
           if (this.docDetailsData.casePhases && this.docDetailsData.casePhases.length > 0){
             this.casePhases = this.docDetailsData.casePhases;
             this.selectedPhase = this.casePhases[0].id;
-            //this.dlmtCaseDetailsService.setCurrentSelectedPhase(this.casePhases[0]);
+            this.dlmtCaseDetailsService.setCurrentSelectedPhase(this.casePhases[0]);
           }
         }
         this.stepId = 1;
@@ -125,7 +125,7 @@ export class DlmtSearchDetailsComponent implements OnInit, OnDestroy {
   }
   onPhaseChange($event){
     if ($event){
-
+      this.dlmtCaseDetailsService.setCurrentSelectedPhase($event);
     }
   }
   initFormData(){

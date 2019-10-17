@@ -28,7 +28,9 @@ namespace DLMT.Biz.Implementation
             ICaseTypeManager caseTypeManager,
             IAgencyManager agencyManager,
             IZoneAreaManager zoneAreaManager,
-            IPlanningOfficeManager planningOfficeManager
+            IPlanningOfficeManager planningOfficeManager,
+            IDeveloperManager developerManager
+
          )
         {
             _repos = repos;
@@ -36,6 +38,7 @@ namespace DLMT.Biz.Implementation
             _agencyManager = agencyManager;
             _zoneAreaManager = zoneAreaManager;
             _planningOfficeManager = planningOfficeManager;
+            _developerManager = developerManager;
         }
         public async Task<DlmtCaseGetAllResponse> GetAllAsync(DlmtCaseGetAllRequest req)
         {

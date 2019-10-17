@@ -4,4 +4,5 @@ export class ViewConstants {
     static ZoneArea = 3;
     static Agency = 4;
     static DlmtSearch = 5;
+    static Contact = 6;
 }

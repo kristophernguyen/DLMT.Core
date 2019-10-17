@@ -75,7 +75,6 @@ app-site-layout {
 }
 
 .search-all.search-all-new-nav input {
-    width: 100%;
     height: 34px;
     padding-left: 40px;
     border: 0;
@@ -124,13 +123,16 @@ app-site-layout {
 
 /* Kendo grid loading */
 
-.k-i-loading {
+.k-i-loading-ext {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     font-size: 64px;
+}
+
+.k-i-loading {
     background-color: rgba(255, 255, 255, .3);
     color: #1b84e7;
 }

@@ -50,7 +50,9 @@ namespace DLMT.Web
 
             services.AddSingleton<IDeveloperRepository, DeveloperRepository>();
             services.AddScoped<IDeveloperManager, DeveloperManager>();
-            
+
+            services.AddSingleton<IContactRepository, ContactRepository>();
+            services.AddScoped<IContactManager, ContactManager>();
 
             services.AddAuthentication(options =>
             {

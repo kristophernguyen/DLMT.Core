@@ -5,7 +5,8 @@
             <li class="breadcrumb-item active" aria-current="page">Case Search</li>
         </ol>
         <h6 class="slim-pagetitle">Case Search</h6>
-    </div><!-- slim-pageheader -->
+    </div>
+    <!-- slim-pageheader -->
     <div class="main-component-container">
         <form class="search-view-form" [formGroup]="searchDataFormGroup" novalidate>
             <div class="box box-search">
@@ -15,8 +16,7 @@
                     </div>
                     <div class="search-all search-all-new-nav col-6">
                         <div class="search-input-container">
-                            <input id="local-search" placeholder="Search Cases ..." name="s"
-                                formControlName="searchInput" />
+                            <input id="local-search" placeholder="Search Cases ..." name="s" class="full-width" formControlName="searchInput" />
                         </div>
                     </div>
                     <div class="col-3">
@@ -26,11 +26,11 @@
             </div>
         </form>
         <div class="box box-grid">
-            <app-dlmt-search-view class="grid-full-height" (actionClick)="gridActionClick($event)"
-                #dlmtSearchViewComponent>
+            <app-dlmt-search-view class="grid-full-height" (actionClick)="gridActionClick($event)" #dlmtSearchViewComponent>
             </app-dlmt-search-view>
         </div>
     </div>
-</div><!-- container -->
+</div>
+<!-- container -->
 <app-dlmt-case-new *ngIf="showNewDialog" (closeDialogClick)="closeNewDialogClick($event)"></app-dlmt-case-new>
 <app-dlmt-search-details *ngIf="showEditDialog" [docId]="mainDocId" (closeDialogClick)="closeEditDialogClick($event)"></app-dlmt-search-details>

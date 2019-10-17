@@ -11,6 +11,7 @@ import { CaseTypeComponent } from './lookup/case-type/case-type.component';
 import { PlanningOfficeComponent } from './lookup/planning-office/planning-office.component';
 import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
 import { AgencyComponent } from './lookup/agency/agency.component';
+import { ContactComponent } from './contact/contact.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
       { path: 'lookup/casetype', component: CaseTypeComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/planningoffice', component: PlanningOfficeComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/zonearea', component: ZoneAreaComponent, canActivate: [AuthGuardService] },
-      { path: 'lookup/agency', component: AgencyComponent, canActivate: [AuthGuardService] }
+      { path: 'lookup/agency', component: AgencyComponent, canActivate: [AuthGuardService] },
+      { path: 'contact', component: ContactComponent, canActivate: [AuthGuardService] }
     ]
   },
   {

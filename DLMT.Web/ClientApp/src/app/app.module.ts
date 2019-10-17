@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient, DeveloperClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient, DeveloperClient, ContactClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -59,6 +59,12 @@ import { DlmtCaseDetailsService } from './services/case-details/case-details-ser
 import { DlmtDetailsOverviewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-overview/dlmt-details-overview.component';
 import { DisableControlDirective } from './common/directives/disable-control';
 import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
+import { ContactComponent } from './contact/contact.component';
+import { ContactViewComponent } from './contact/contact-view/contact-view.component';
+import { ContactDetailsComponent } from './contact/contact-details/contact-details.component';
+import { ContactApiHelperService } from './services/grid-helper/contact-service-helper';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+
 
 @NgModule({
   declarations: [
@@ -93,7 +99,10 @@ import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
     DlmtDetailsDeveloperComponent,
     DlmtDetailsAssociatedcasesComponent,
     DlmtDetailsOverviewComponent,
-    DisableControlDirective
+    DisableControlDirective,
+    ContactComponent,
+    ContactViewComponent,
+    ContactDetailsComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -108,6 +117,7 @@ import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
     InputsModule,
     ButtonModule,
     DropDownButtonModule,
+    DropDownsModule,
     WindowModule,
     DialogModule,
     MatProgressBarModule,
@@ -123,13 +133,14 @@ import {NgbTabsetModule} from '@ng-bootstrap/ng-bootstrap';
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient, DeveloperClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient, DeveloperClient,ContactClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,
     ZoneAreaApiHelperService,
     AgencyApiHelperService,
     DlmtSearchApiHelperService,
+    ContactApiHelperService,
     DlmtCaseDetailsService,
 
     { provide: AppSettingApiUrl, useValue:environment.api_url.appsetting },

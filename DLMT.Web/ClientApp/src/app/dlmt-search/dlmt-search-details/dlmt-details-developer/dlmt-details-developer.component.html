@@ -14,164 +14,103 @@
 <!-- message-header -->
 <div class="message-body ps ps--theme_default message-body-ext">
     <div class="main-component-container border_less">
+        <mat-progress-bar mode="indeterminate" [hidden]="!isLoading"></mat-progress-bar>
         <div class="alert alert-container" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert">
             {{alertText}}
         </div>
 
         <div class="box box-grid">
-            <div class="developer-container">
+            <div class="developer-container" *ngIf="isReady">
                 <div class="card-deck card-deck-sm mg-t-20 mg-x-0 full-height">
-                    <div class="card card-recent-messages">
-                        <div class="card-header">
-                            <span>Developers</span>
-                        </div>
-                        <!-- card-header -->
-                        <div class="list-group list-group-flush full-height">
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <i class="icon ion-person-add add-icon"></i>
-                                    <div class="media-body">
-                                        <ng-select formControlName="area" [items]="areaList" labelForId="area" bindValue="id" bindLabel="name" placeholder="Select a developer ...">
-                                        </ng-select>
-                                    </div>
-                                    <!-- media-body -->
+                    <!-- developers -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">Developers</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                        <ng-template kendoDropDownListFooterTemplate>
+                                            <div class="full-width dropdown-footer-ext ">Can't find developer?&nbsp;&nbsp;<span><a (click)="newDeveloper($event)">New</a></span></div>
+                                        </ng-template>
+                                    </kendo-dropdownlist>
                                 </div>
+                                <!-- media-body -->
+
                             </div>
-                            <!-- list-group-item -->
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <i class="icon ion-person existing-person-icon"></i>
-                                    <div class="media-body">
-                                        <h6>Mary Grace Ceballos</h6>
-                                        <p>2 hours ago</p>
-                                    </div>
-                                    <!-- media-body -->
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
                                 </div>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
                             </div>
-                            <!-- list-group-item -->
+
+
                         </div>
-                        <!-- list-group -->
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-outline-primary" (click)="exportView($event)"><i
-                                    class="fa fa-pencil-square-o mg-r-5"></i> Add</button>&nbsp;&nbsp;
-                            <button class="btn btn-sm btn-outline-danger" (click)="newDocClick()"><i
-                                    class="fa fa-trash mg-r-5"></i> Delete</button>
-                        </div>
-                        <!-- card-footer -->
+                        <!-- media-list -->
                     </div>
-                    <!-- card -->
-                    <div class="card card-recent-messages">
-                        <div class="card-header">
-                            <span>External Engineers</span>
-                            <a href=""><i class="ion-person-add"></i></a>
-                        </div>
-                        <!-- card-header -->
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Katherine Lumaad</h6>
-                                        <p>an hour ago</p>
-                                    </div>
-                                    <!-- media-body -->
+                    <!-- external engineers -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">External Engineers</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                    </kendo-dropdownlist>
                                 </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
+                                <!-- media-body -->
+
                             </div>
-                            <!-- list-group-item -->
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Mary Grace Ceballos</h6>
-                                        <p>2 hours ago</p>
-                                    </div>
-                                    <!-- media-body -->
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
                                 </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
                             </div>
-                            <!-- list-group-item -->
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Rowella Sombrio</h6>
-                                        <p>3 hours ago</p>
-                                    </div>
-                                    <!-- media-body -->
-                                </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
-                            </div>
-                            <!-- list-group-item -->
+
+
                         </div>
-                        <!-- list-group -->
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-outline-primary" (click)="exportView($event)"><i
-                                    class="fa fa-pencil-square-o mg-r-5"></i> Add</button>&nbsp;&nbsp;
-                            <button class="btn btn-sm btn-outline-danger" (click)="newDocClick()"><i
-                                    class="fa fa-trash mg-r-5"></i> Delete</button>
-                        </div>
-                        <!-- card-footer -->
+                        <!-- media-list -->
                     </div>
-                    <!-- card -->
-                    <div class="card card-recent-messages">
-                        <div class="card-header">
-                            <span>Consultants</span>
-                            <a href=""><i class="ion-person-add"></i></a>
-                        </div>
-                        <!-- card-header -->
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Katherine Lumaad</h6>
-                                        <p>an hour ago</p>
-                                    </div>
-                                    <!-- media-body -->
+                    <!-- consultants -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">Consultants</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                    </kendo-dropdownlist>
                                 </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
+                                <!-- media-body -->
+
                             </div>
-                            <!-- list-group-item -->
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Mary Grace Ceballos</h6>
-                                        <p>2 hours ago</p>
-                                    </div>
-                                    <!-- media-body -->
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
                                 </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
                             </div>
-                            <!-- list-group-item -->
-                            <div class="list-group-item">
-                                <div class="media">
-                                    <img src="http://via.placeholder.com/500x500" alt="">
-                                    <div class="media-body">
-                                        <h6>Rowella Sombrio</h6>
-                                        <p>3 hours ago</p>
-                                    </div>
-                                    <!-- media-body -->
-                                </div>
-                                <!-- media -->
-                                <p class="msg">The European languages are members of the same family. Their separate existence is a myth...</p>
-                            </div>
-                            <!-- list-group-item -->
+
+
                         </div>
-                        <!-- list-group -->
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-outline-primary" (click)="exportView($event)"><i
-                                    class="fa fa-pencil-square-o mg-r-5"></i> Add</button>&nbsp;&nbsp;
-                            <button class="btn btn-sm btn-outline-danger" (click)="newDocClick()"><i
-                                    class="fa fa-trash mg-r-5"></i> Delete</button>
-                        </div>
-                        <!-- card-footer -->
+                        <!-- media-list -->
                     </div>
                     <!-- card -->
                 </div>

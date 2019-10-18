@@ -51,10 +51,8 @@ import { AgencyApiHelperService } from './services/grid-helper/agency-service-he
 import { DlmtSearchApiHelperService } from './services/grid-helper/dlmtcase-service-helper';
 import { DlmtCaseNewComponent } from './dlmt-search/dlmt-case-new/dlmt-case-new.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { DlmtDetailsCasephaseComponent } from './dlmt-search/dlmt-search-details/dlmt-details-casephase/dlmt-details-casephase.component';
 import { DlmtDetailsDocumentsComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/dlmt-details-documents.component';
 import { DlmtDetailsDeveloperComponent } from './dlmt-search/dlmt-search-details/dlmt-details-developer/dlmt-details-developer.component';
-import { DlmtDetailsAssociatedcasesComponent } from './dlmt-search/dlmt-search-details/dlmt-details-associatedcases/dlmt-details-associatedcases.component';
 import { DlmtCaseDetailsService } from './services/case-details/case-details-service-helper';
 import { DlmtDetailsOverviewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-overview/dlmt-details-overview.component';
 import { DisableControlDirective } from './common/directives/disable-control';
@@ -64,6 +62,26 @@ import { ContactViewComponent } from './contact/contact-view/contact-view.compon
 import { ContactDetailsComponent } from './contact/contact-details/contact-details.component';
 import { ContactApiHelperService } from './services/grid-helper/contact-service-helper';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { DlmtDetailsAdpComponent } from './dlmt-search/dlmt-search-details/dlmt-details-adp/dlmt-details-adp.component';
+import { DlmtDetailsChargeaccountComponent } from './dlmt-search/dlmt-search-details/dlmt-details-chargeaccount/dlmt-details-chargeaccount.component';
+import { AllDocumentViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/all-document-view/all-document-view.component';
+import { PlancheckDocumentViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/plancheck-document-view/plancheck-document-view.component';
+import { NonplancheckDocumentViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/nonplancheck-document-view/nonplancheck-document-view.component';
+import { PlancheckDocumentDetailsComponent } from './dlmt-search/dlmt-search-details/dlmt-details-documents/plancheck-document-details/plancheck-document-details.component';
+import { DlmtDetailsFeesComponent } from './dlmt-search/dlmt-search-details/dlmt-details-fees/dlmt-details-fees.component';
+import { AdpfeeTransactionViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-fees/adpfee-transaction-view/adpfee-transaction-view.component';
+import { AdpfeeViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-fees/adpfee-view/adpfee-view.component';
+import { NonAdpfeeViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-fees/non-adpfee-view/non-adpfee-view.component';
+import { DlmtDetailsPlancheckComponent } from './dlmt-search/dlmt-search-details/dlmt-details-plancheck/dlmt-details-plancheck.component';
+import { DlmtDetailsPlancheckViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-plancheck/dlmt-details-plancheck-view/dlmt-details-plancheck-view.component';
+import { DlmtDetailsTentativereviewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-tentativereview/dlmt-details-tentativereview.component';
+import { DlmtDetailsTentativereviewViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-tentativereview/dlmt-details-tentativereview-view/dlmt-details-tentativereview-view.component';
+import { DlmtDetailsAssociatedcaseComponent } from './dlmt-search/dlmt-search-details/dlmt-details-associatedcase/dlmt-details-associatedcase.component';
+import { DlmtDetailsAssociatedcaseViewComponent } from './dlmt-search/dlmt-search-details/dlmt-details-associatedcase/dlmt-details-associatedcase-view/dlmt-details-associatedcase-view.component';
+import { DlmtDetailsPlottingComponent } from './dlmt-search/dlmt-search-details/dlmt-details-plotting/dlmt-details-plotting.component';
+import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
+import { ReportComponent } from './report/report.component';
+
 
 
 @NgModule({
@@ -94,15 +112,32 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     AgencyDetailsComponent,
     AgencyViewComponent,
     DlmtCaseNewComponent,
-    DlmtDetailsCasephaseComponent,
     DlmtDetailsDocumentsComponent,
     DlmtDetailsDeveloperComponent,
-    DlmtDetailsAssociatedcasesComponent,
     DlmtDetailsOverviewComponent,
     DisableControlDirective,
     ContactComponent,
     ContactViewComponent,
-    ContactDetailsComponent
+    ContactDetailsComponent,
+    DlmtDetailsAdpComponent,
+    DlmtDetailsChargeaccountComponent,
+    AllDocumentViewComponent,
+    PlancheckDocumentViewComponent,
+    NonplancheckDocumentViewComponent,
+    PlancheckDocumentDetailsComponent,
+    DlmtDetailsFeesComponent,
+    AdpfeeTransactionViewComponent,
+    AdpfeeViewComponent,
+    NonAdpfeeViewComponent,
+    DlmtDetailsPlancheckComponent,
+    DlmtDetailsPlancheckViewComponent,
+    DlmtDetailsTentativereviewComponent,
+    DlmtDetailsTentativereviewViewComponent,
+    DlmtDetailsAssociatedcaseComponent,
+    DlmtDetailsAssociatedcaseViewComponent,
+    DlmtDetailsPlottingComponent,
+    DashboardMainComponent,
+    ReportComponent
   ],
   imports: [
     BrowserAnimationsModule,

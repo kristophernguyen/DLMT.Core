@@ -1,1 +1,67 @@
-<p>dlmt-details-documents works!</p>
+<div class="message-header">
+    <a href="" class="message-back"><i class="fa fa-angle-left"></i></a>
+    <div class="media">
+        <i class="icon ion-document-text tx-30"></i>
+        <div class="media-body">
+            <h6>Documents</h6>
+        </div>
+        <!-- media-body -->
+    </div>
+    <!-- media -->
+    <div class="message-option">&nbsp;
+    </div>
+</div>
+<!-- message-header -->
+<div class="message-body ps ps--theme_default message-body-ext">
+    <div class="main-component-container border_less">
+        <div class="alert alert-container" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert">
+            {{alertText}}
+        </div>
+
+        <div class="box box-grid">
+            <div class="document-container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="tabSelect($event, 1)" [ngClass]="{'active': tabId === 1}">Plan Check</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="tabSelect($event, 2)" [ngClass]="{'active': tabId === 2}">Non-Plan Check</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="tabSelect($event, 3)" [ngClass]="{'active': tabId === 3}">All</a>
+                    </li>
+                </ul>
+                <div *ngIf="tabId === 1" class="tab-content">
+                    <form class="search-view-form" [formGroup]="searchDataPlanCheckFormGroup" novalidate>
+                        <div class="box box-search">
+                            <div class="row">
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                                <div class="search-all search-all-new-nav col-6">
+                                    <div class="search-input-container">
+                                        <input placeholder="Search Plan Check ..." name="s" formControlName="searchPlanCheckInput" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="tab-content-view">
+                        <app-plancheck-document-view class="tab-content-view-app"></app-plancheck-document-view>
+                    </div>
+                </div>
+                <div id="external_engineer" *ngIf="tabId === 2" class="tab-content">
+                    External Engineer
+                </div>
+                <div id="consultant" *ngIf="tabId === 3" class="tab-content">
+                    Consultant
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- message-body -->

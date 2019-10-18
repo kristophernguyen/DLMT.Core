@@ -1,9 +1,9 @@
 <div class="message-header">
     <a href="" class="message-back"><i class="fa fa-angle-left"></i></a>
     <div class="media">
-        <i class="fa fa-user fa-2x"></i>
+        <i class="fa fa-dollar tx-30"></i>
         <div class="media-body">
-            <h6>Developers</h6>
+            <h6>Fees</h6>
         </div>
         <!-- media-body -->
     </div>
@@ -19,22 +19,20 @@
         </div>
 
         <div class="box box-grid">
-            <div class="developer-container">
+            <div class="document-container">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" (click)="tabSelect($event, 1)" [ngClass]="{'active': tabId === 1}">Internal
-                                Engineer</a>
+                        <a class="nav-link" (click)="tabSelect($event, 1)" [ngClass]="{'active': tabId === 1}">ADP Fee Transactions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" (click)="tabSelect($event, 2)" [ngClass]="{'active': tabId === 2}">External
-                                Engineer</a>
+                        <a class="nav-link" (click)="tabSelect($event, 2)" [ngClass]="{'active': tabId === 2}">ADP Fees</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" (click)="tabSelect($event, 3)" [ngClass]="{'active': tabId === 3}">Consultants</a>
+                        <a class="nav-link" (click)="tabSelect($event, 3)" [ngClass]="{'active': tabId === 3}">Non-ADP Fees</a>
                     </li>
                 </ul>
-                <div id="internal_engineer" *ngIf="tabId === 1" class="tab-content">
-                    <form class="search-view-form" [formGroup]="searchDataFormGroup" novalidate>
+                <div *ngIf="tabId === 1" class="tab-content">
+                    <form class="search-view-form" [formGroup]="searchDataPlanCheckFormGroup" novalidate>
                         <div class="box box-search">
                             <div class="row">
                                 <div class="col-3">
@@ -42,7 +40,7 @@
                                 </div>
                                 <div class="search-all search-all-new-nav col-6">
                                     <div class="search-input-container">
-                                        <input id="local-search" placeholder="Search ..." name="s" formControlName="searchInput" />
+                                        <input placeholder="Search Fee ..." name="s" formControlName="searchPlanCheckInput" />
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -51,8 +49,8 @@
                             </div>
                         </div>
                     </form>
-                    <div class="box box-grid">
-
+                    <div class="tab-content-view">
+                        <app-adpfee-transaction-view class="tab-content-view-app"></app-adpfee-transaction-view>
                     </div>
                 </div>
                 <div id="external_engineer" *ngIf="tabId === 2" class="tab-content">

@@ -108,6 +108,11 @@
 
 /* Nav */
 
+.activelink {
+    border-right: 5px solid #1515af !important;
+    background-color: #f8f9fa;
+}
+
 .show_nav {
     display: block;
 }

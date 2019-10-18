@@ -4,9 +4,8 @@ import { IColumn } from 'src/app/model/kendo-column';
 import { DataStateChangeEvent, GridDataResult, GridComponent } from '@progress/kendo-angular-grid';
 import { State, SortDescriptor, FilterDescriptor} from '@progress/kendo-data-query';
 import { Observable } from 'rxjs/internal/Observable';
-import { PlanningOfficeDTO, PlanningOfficeClient, ZoneAreaClient } from 'src/app/services/apis/dlmt-api';
+import { PlanningOfficeDTO, ZoneAreaClient } from 'src/app/services/apis/dlmt-api';
 import { ViewConstants } from 'src/app/common/constants/viewconst';
-import { PlanningOfficeApiHelperService } from 'src/app/services/grid-helper/planningoffice-service-helper';
 import { ZoneAreaApiHelperService } from 'src/app/services/grid-helper/zonearea-service-helper';
 
 @Component({
@@ -88,7 +87,7 @@ export class ZoneAreaViewComponent implements OnInit, OnDestroy {
         } as State;
         this.zoneAreaApiHelperService.getAllZoneArea(this.state);
       },
-      err => {
+      () => {
 
       }
     );
@@ -113,12 +112,12 @@ export class ZoneAreaViewComponent implements OnInit, OnDestroy {
     }
     this.zoneAreaApiHelperService.getAllZoneArea(this.state);
   }
-  public editHandler({sender, rowIndex, dataItem}) {
+  public editHandler({rowIndex, dataItem}) {
     if (rowIndex >= 0){
       this.actionClick.emit({action: 'edit', data: {doc: dataItem}});
     }
   }
-  public deleteHandler({ sender, dataItem }) {
+  public deleteHandler({ dataItem }) {
     if (dataItem.id >= 0){
       this.currentRemoveDoc = dataItem;
       this.openConfirmDialog();

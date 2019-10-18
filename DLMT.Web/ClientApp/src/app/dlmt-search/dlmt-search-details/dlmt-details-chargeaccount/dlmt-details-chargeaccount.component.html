@@ -1,0 +1,122 @@
+<div class="message-header">
+    <a href="" class="message-back"><i class="fa fa-angle-left"></i></a>
+    <div class="media">
+        <i class="fa fa-credit-card fa-2x"></i>
+        <div class="media-body">
+            <h6>Charge Account</h6>
+        </div>
+        <!-- media-body -->
+    </div>
+    <!-- media -->
+    <div class="message-option">&nbsp;
+    </div>
+</div>
+<!-- message-header -->
+<div class="message-body ps ps--theme_default message-body-ext">
+    <div class="main-component-container border_less">
+        <mat-progress-bar mode="indeterminate" [hidden]="!isLoading"></mat-progress-bar>
+        <div class="alert alert-container" [ngClass]="{'alert-danger': hasError, 'alert-primary': !hasError}" role="alert">
+            {{alertText}}
+        </div>
+
+        <div class="box box-grid">
+            <div class="developer-container" *ngIf="isReady">
+                <div class="card-deck card-deck-sm mg-t-20 mg-x-0 full-height">
+                    <!-- Tentative Charge Accounts -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">Tentative Charge Account</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                        <ng-template kendoDropDownListFooterTemplate>
+                                            <div class="full-width dropdown-footer-ext ">Can't find developer?&nbsp;&nbsp;<span><a (click)="newDeveloper($event)">New</a></span></div>
+                                        </ng-template>
+                                    </kendo-dropdownlist>
+                                </div>
+                                <!-- media-body -->
+
+                            </div>
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
+                                </div>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
+                            </div>
+
+
+                        </div>
+                        <!-- media-list -->
+                    </div>
+                    <!-- Plan Check Charge Accounts -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">Plan Check Charge Accounts</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                    </kendo-dropdownlist>
+                                </div>
+                                <!-- media-body -->
+
+                            </div>
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
+                                </div>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
+                            </div>
+
+
+                        </div>
+                        <!-- media-list -->
+                    </div>
+                    <!-- Inspection Charge Accounts -->
+                    <div class="card card-people-list pd-20">
+                        <div class="slim-card-title">Inspection Charge Accounts</div>
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="icon ion-person-add tx-20"></i>
+                                <div class="media-body">
+                                    <kendo-dropdownlist [filterable]="true" [loading]="isDeveloperSearchLoading" [data]="developerSearchList" [textField]="'displayName'" [valueField]="'id'" class="full-width" (filterChange)="handleDeveloperFilter($event)">
+                                    </kendo-dropdownlist>
+                                </div>
+                                <!-- media-body -->
+
+                            </div>
+                            <!-- media -->
+
+                            <div class="media" *ngFor="let d of developerList; let i = index;">
+                                <i class="icon ion-person tx-20"></i>
+                                <div class="media-body">
+                                    <a href="">{{d.name}}</a>
+                                    <p class="tx-12">Phone: {{d.phone || 'Not Available'}}</p>
+                                </div>
+                                <!-- media-body -->
+                                <a href=""><i class="icon ion-trash-a tx-20"></i></a>
+                            </div>
+
+
+                        </div>
+                        <!-- media-list -->
+                    </div>
+                    <!-- card -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- message-body -->

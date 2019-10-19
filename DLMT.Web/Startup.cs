@@ -3,6 +3,7 @@ using DLMT.Biz.Interface;
 using DLMT.Common.DTO;
 using DLMT.Dac.Implementation;
 using DLMT.Dac.Interface;
+using DLMT.Web.Extensions.DI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,29 +32,7 @@ namespace DLMT.Web
             var idsSetting = Configuration.GetSection("IdentityServer").Get<IdentityServerSettingDTO>();
             var connectionSetting = Configuration.GetSection("ConnectionStrings");
             services.Configure<ConnectionSettingDTO>(connectionSetting);
-            
-            services.AddSingleton<ICaseTypeRepository, CaseTypeRepository>();
-            services.AddScoped<ICaseTypeManager, CaseTypeManager>();
-
-            services.AddSingleton<IPlanningOfficeRepository, PlanningOfficeRepository>();
-            services.AddScoped<IPlanningOfficeManager, PlanningOfficeManager>();
-
-            services.AddSingleton<IZoneAreaRepository, ZoneAreaRepository>();
-            services.AddScoped<IZoneAreaManager, ZoneAreaManager>();
-
-            services.AddSingleton<IAgencyRepository, AgencyRepository>();
-            services.AddScoped<IAgencyManager, AgencyManager>();
-
-            services.AddSingleton<IDlmtCaseRepository, DlmtCaseRepository>();
-            services.AddScoped<IDlmtCasemanager, DlmtCasemanager>();
-
-
-            services.AddSingleton<IDeveloperRepository, DeveloperRepository>();
-            services.AddScoped<IDeveloperManager, DeveloperManager>();
-
-            services.AddSingleton<IContactRepository, ContactRepository>();
-            services.AddScoped<IContactManager, ContactManager>();
-
+            services.InjectDlmtDependency();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

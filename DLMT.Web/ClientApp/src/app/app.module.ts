@@ -31,7 +31,7 @@ import { CaseTypeDetailsComponent } from './lookup/case-type/case-type-details/c
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonModule, DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { WindowModule, DialogModule } from '@progress/kendo-angular-dialog';
-import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient, DeveloperClient, ContactClient } from './services/apis/dlmt-api';
+import { CaseTypeClient, PlanningOfficeClient, ZoneAreaClient, AgencyClient, DlmtCaseClient, DeveloperClient, ContactClient, ReportClient } from './services/apis/dlmt-api';
 import { CaseTypeApiHelperService } from './services/grid-helper/casetype-service-helper';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
@@ -81,6 +81,7 @@ import { DlmtDetailsAssociatedcaseViewComponent } from './dlmt-search/dlmt-searc
 import { DlmtDetailsPlottingComponent } from './dlmt-search/dlmt-search-details/dlmt-details-plotting/dlmt-details-plotting.component';
 import { DashboardMainComponent } from './dashboard/dashboard-main/dashboard-main.component';
 import { ReportComponent } from './report/report.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 
@@ -157,7 +158,8 @@ import { ReportComponent } from './report/report.component';
     DialogModule,
     MatProgressBarModule,
     NgSelectModule,
-    NgbTabsetModule
+    NgbTabsetModule,
+    NgxChartsModule
   ],
   providers: [
     AppSettingService,
@@ -168,7 +170,7 @@ import { ReportComponent } from './report/report.component';
       useClass: TokenInterceptor,
       multi: true
     },
-    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient, DeveloperClient,ContactClient,
+    CaseTypeClient, PlanningOfficeClient,ZoneAreaClient,AgencyClient,DlmtCaseClient, DeveloperClient,ContactClient,ReportClient,
     AppMenuClient, AppSettingClient, ViewSettingClient,
     CaseTypeApiHelperService,
     PlanningOfficeApiHelperService,

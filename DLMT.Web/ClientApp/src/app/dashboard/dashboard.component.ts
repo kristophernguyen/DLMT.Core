@@ -12,14 +12,4 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
   }
-  getToken($event){
-    this.appMenuClient.appMenu(1).subscribe(
-      x=>{
-        console.log(x);
-      },
-      err =>{
-
-      }
-    )
-  }
 }

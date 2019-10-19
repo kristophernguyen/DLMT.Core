@@ -12,6 +12,7 @@ import { PlanningOfficeComponent } from './lookup/planning-office/planning-offic
 import { ZoneAreaComponent } from './lookup/zone-area/zone-area.component';
 import { AgencyComponent } from './lookup/agency/agency.component';
 import { ContactComponent } from './contact/contact.component';
+import { ReportComponent } from './report/report.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
     children:[
       { path: '', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuardService]},
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
+      { path: 'reports', component: ReportComponent, canActivate: [AuthGuardService]},
       { path: 'dlmtsearch', component: DlmtSearchComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/casetype', component: CaseTypeComponent, canActivate: [AuthGuardService] },
       { path: 'lookup/planningoffice', component: PlanningOfficeComponent, canActivate: [AuthGuardService] },
